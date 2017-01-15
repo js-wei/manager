@@ -1,0 +1,189 @@
+</div>
+            <!-- /Page Body -->
+        </div>
+        <!-- /Page Content -->
+    </div>
+    <!-- /Page Container -->
+    <!-- Main Container -->
+
+</div>
+<!--Beyond Scripts-->
+<script src="__JS__/beyond.min.js"></script>
+<!--Page Related Scripts-->
+<script src="__JS__/datatable/jquery.dataTables.min.js"></script>
+<script src="__JS__/datatable/ZeroClipboard.js"></script>
+<script src="__JS__/datatable/dataTables.tableTools.min.js"></script>
+<script src="__JS__/datatable/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript">
+    //加载样式
+    $(window).bind("load", function() {
+        /*Sets Themed Colors Based on Themes*/
+        themeprimary = getThemeColorFromCss('themeprimary');
+        themesecondary = getThemeColorFromCss('themesecondary');
+        themethirdcolor = getThemeColorFromCss('themethirdcolor');
+        themefourthcolor = getThemeColorFromCss('themefourthcolor');
+        themefifthcolor = getThemeColorFromCss('themefifthcolor');
+    });
+    $(function(){
+    	layui.use('layer', function(){
+		  var layer = layui.layer;
+			  /**
+	         * [退出]
+	         * @param  {[type]} e)               {                   e.preventDefault();                           var index [description]
+	         * @param  {[type]} function(result) {                                          layer.close(index);                                 if (result.status [description]
+	         * @return {[type]}                  [description]
+	         */
+	        $('.logout').on('click',function(e) {
+	            e.preventDefault();
+	            var index = layer.load(2, {
+	                shard: [0.9, "#000"]
+	            });
+	            $.get($(this).attr('href'), function(result) {
+	                layer.close(index);
+	                if (result.status == 0) {
+	                    layer.alert(result.msg, {
+	                        icon: 5
+	                    });
+	                } else {
+	                    layer.alert(result.msg, {
+	                        icon: 6,
+	                        end: function() {
+	                            window.location.href = result.redirect;
+	                        }
+	                    });
+	                }
+	            });
+	        });
+	
+	        /**
+	         * [修改状态]
+	         * @param  {[type]} e)           {                   e.preventDefault();                                          var url [请求地址]
+	         * @param  {String} function(){                                                $('.checkboxes').each(function(){                                       if($(this).is(':checked')){                        q + [操作参数]
+	         * @return {[type]}              [description]
+	         */
+	        $('.status').on('click',function(e) {
+	            e.preventDefault();
+	            var url = $(this).attr('href');
+	            var type = $(this).attr('data-role');
+	            var id = $(this).attr('data-id');
+	            var q='';
+	            $('.checkboxes').each(function(){
+	                if($(this).is(':checked')){
+	                    q += ','+$(this).val();
+	                }
+	            });
+	            q = q.substr(1);
+	           
+	            if(id!= undefined){
+	                if(type=='delete'){
+	                    layer.confirm('您确定要删除吗?删除后将不能恢复!', {
+	                      btn: ['是的确定','不没想好'] //按钮
+	                    }, function(){
+	                        var index = layer.load(2, {
+	                            shard: [0.6, "#000"]
+	                        });
+	                        $.post(url,{id:id,type:type},function(result){
+	                            layer.close(index);
+	                            layer.alert(result.msg, {
+	                                icon: 6,
+	                                end: function() {
+	                                    if(result.redirect!=''){
+	                                        window.location.href=result.redirect;
+	                                    }else{
+	                                        window.location.reload();
+	                                     }
+	                                }
+	                            }); 
+	                        });
+	                    });
+	                }else{
+	                    var index = layer.load(2, {
+	                        shard: [0.6, "#000"]
+	                    });
+	                    $.post(url,{id:id,type:type},function(result){
+	                        layer.close(index);
+	                        layer.alert(result.msg, {
+	                            icon: 6,
+	                            end: function() {
+	                                if(result.redirect!=''){
+	                                    window.location.href=result.redirect;
+	                                }else{
+	                                    window.location.reload();
+	                                 }
+	                            }
+	                        }); 
+	                    }); 
+	                }
+	            }else{
+	                if(type=='delete-all'){
+	                    layer.confirm('您确定要删除吗?删除后将不能恢复!', {
+	                      btn: ['是的确定','不没想好'] //按钮
+	                    }, function(){
+	                        if(q!=''){
+	                            var index = layer.load(2, {
+	                                shard: [0.6, "#000"]
+	                            });
+	                            $.post(url,{id:q,type:type},function(result){
+	                                layer.close(index);
+	                                if (result.status==1) {
+	                                    layer.alert(result.msg, {
+	                                        icon: 6,
+	                                        end: function() {
+	                                            if(result.redirect!=''){
+	                                                window.location.href=result.redirect;
+	                                            }else{
+	                                                window.location.reload();
+	                                            }
+	                                        }
+	                                    }); 
+	                                }else{
+	                                    layer.alert(result.msg,{icon:5});
+	                                }
+	                            });
+	                        }else{
+	                            layer.close(index);
+	                            layer.alert('请选择需要操作项',{icon:5});
+	                        }
+	                    });
+	                }else{
+	                    var index = layer.load(2, {
+	                        shard: [0.6, "#000"]
+	                    });
+	                    $.post(url,{id:q,type:type},function(result){
+	                        layer.close(index);
+	                        layer.alert(result.msg, {
+	                            icon: 6,
+	                            end: function() {
+	                                if(result.redirect!=''){
+	                                    window.location.href=result.redirect;
+	                                }else{
+	                                    window.location.reload();
+	                                 }
+	                            }
+	                        }); 
+	                    }); 
+	                }
+	            }
+	        });
+		}); 
+        
+        $('#simpledatatable tbody tr .checkboxes').change(function () {
+            $(this).parents('tr').toggleClass("active");
+        });
+        $('#simpledatatable_length').remove();
+        $('.DTTT.btn-group').css('right','0px');
+        $('input[type="search"]').attr('placeholder', '请输入标题/发布者');
+        $('.dataTables_filter').css({"position":"relative","height":"40px"});
+        $('.dataTables_filter label').append("<button class=\"btn btn-info ml10 search\">搜索</button>").css({
+            "position":"absolute",
+            "left":"0px"
+        });
+        $('.search').on('click',function(e){
+            e.preventDefault();
+            alert(1);
+        });
+    });
+</script>
+</body>
+<!--  /Body -->
+</html>

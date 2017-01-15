@@ -1,0 +1,236 @@
+<include file="public/header" title="{$model.name}" keywords="{$model.name}"/>
+<div class="col-lg-12 col-sm-12 col-xs-12">
+    <div class="widget  radius-bordered">
+        <div class="widget-header">
+            <span class="widget-caption">优惠券操作</span>
+        </div>
+        <div class="widget-body">
+            <form id="togglingForm" action="__URL__/add_handler" method="post" enctype="multipart/form-data" class="form-horizontal" autocomplete="off">
+                <div class="form-group">
+                    <label class="col-lg-1 control-label">优惠券前缀</label>
+                    <div class="col-lg-2">
+                        <input type="text" name="_suffix"  class="form-control" id="suffix" placeholder="优惠券前缀"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-1 control-label">优惠券名称<sup>*</sup></label>
+                    <div class="col-lg-2">
+                        <input type="text" name="coupons_title" value="<notempty name="info">{$info.coupons_title}</notempty>" class="form-control" id="coupons_title" placeholder="优惠券名称"/>
+                        <input type="hidden" name="id" value="<notempty name='info'>{$info.id}</notempty>">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-1 control-label">优惠券类型<sup>*</sup></label>
+                    <div class="col-lg-2">
+                        <select name="coupons_type">
+                            <option value="0">折扣</option>
+                            <option value="1">现金</option>
+                            <option value="2">实物</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-1 control-label">优惠券说明</label>
+                    <div class="col-lg-4">
+                        <textarea name="coupon_content" class="form-control" rows="6" placeholder="优惠券说明"><notempty name="info">{$info.coupon_content}</notempty></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-1 control-label">优惠券面值<sup>*</sup></label>
+                    <div class="col-lg-2">
+                        <input type="text" name="coupons_val" value="<notempty name="info">{$info.coupons_val}</notempty>" class="form-control" id="coupons_val" placeholder="优惠券面值"/>
+                    </div>
+                </div>
+                <div class="form-group show-box" style="display:none;">
+                    <label class="col-lg-1 control-label">选择栏目<sup>*</sup></label>
+                    <div class="col-lg-4">
+                        <select name="coupon_cid" id="coupon_cid">
+                            <option value="-1">-----选择栏目-----</option>
+                        </select>
+                        <select name="coupon_pid" id="coupon_pid">
+                            <option value="-1">-----选择物品-----</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group show-box" style="display:none;">
+                    <label class="col-lg-1 control-label">兑换实物数量<sup>*</sup></label>
+                    <div class="col-lg-2">
+                        <input type="number" name="coupon_pid_num" value="<notempty name="info">{$info.coupons_number}</notempty>" class="form-control" id="coupon_pid_num" placeholder="兑换实物数量"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-1 control-label">生成数量<sup>*</sup></label>
+                    <div class="col-lg-2">
+                        <input type="number" name="coupons_sums" value="10" class="form-control" id="coupons_sums" placeholder="生成数量"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-1 control-label">优惠券状态</label>
+                    <div class="col-lg-6">
+                        <div class="radio pull-left">
+                            <label>
+                                <input name="status" type="radio" value="0" class="colored-success" <notempty name="info"><eq name="info.status" value="0">checked="checked"</eq><else />checked="checked"</notempty>>
+                                <span class="text">是</span>
+                            </label>
+                        </div>
+                        <div class="radio pull-left">
+                            <label>
+                                <input name="status" type="radio" value="1" class="colored-danger" <notempty name="info"><eq name="info.status" value="1">checked="checked"</eq></notempty>>
+                                <span class="text">否</span>
+                            </label>
+                        </div>
+                        <div class="radio hide">
+                            <label>
+                                <input name="status" type="radio" class="colored-blueberry">
+                                <span class="text"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <hr class="wide" />
+                <div class="form-group">
+                    <div class="col-lg-4 col-lg-offset-1">
+                        <button type="submit" class="btn btn-danger col-lg-2">提交</button>
+                        <button type="button" class="btn btn-warning col-lg-2 ml10" onclick="window.history.go(-1);">返回</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<js file="__JS__/validation/bootstrapValidator.js"/>
+<link rel="stylesheet" href="__PLUG__/Uploadify/uploadify.css" />
+<script type="text/javascript" src="__PLUG__/Uploadify/jquery.uploadify.min.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $('#togglingForm').bootstrapValidator({
+            message: '验证没有通过',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            submitHandler: function (validator, form, submitButton) {
+                var index = layer.load(2,{
+                    shade: [0.4,'#000'] //0.1透明度的白色背景
+                });
+                $.post(form.attr('action'),form.serialize(),function(data){
+                    layer.close(index);
+                    if(data.status==1){
+                        layer.alert(data.msg,{icon:6,end:function(){
+                            location.href = data.redirect;
+                        }});
+                    }else {
+                        layer.alert(data.msg,{icon:5});
+                    }
+                });
+            },
+            fields: {
+                coupons_title: {
+                    validators: {
+                        notEmpty: {
+                            message: '*请输入优惠券名称'
+                        }
+                    }
+                },
+                coupons_val:{
+                    validators: {
+                        notEmpty: {
+                            message: '*请输入优惠券面值'
+                        }
+                    }
+                },
+                coupon_pid_num:{
+                     validators: {
+                        notEmpty: {
+                            message: '*请输入兑换实物数量'
+                        },
+                        integer: {
+                            message: '*请输入正确的数字'
+                        }
+                    }
+                },
+                coupon_cid: {
+                    validators: {
+                        callback: {
+                            message: '*请选择物品栏目',
+                            callback: function(value, validator) {
+                                var options = validator.getFieldElements('coupon_cid').val();
+                                return (options != null && options>-1);
+                            }
+                        }
+                    }
+                },
+                coupon_pid: {
+                    validators: {
+                        callback: {
+                            message: '*请选物品',
+                            callback: function(value, validator) {
+                                var options = validator.getFieldElements('coupon_pid').val();
+                                return (options != null && options>-1);
+                            }
+                        }
+                    }
+                },
+                coupons_sums:{
+                    validators:{
+                        notEmpty:{
+                            message: '*请输入生成优惠券数量'
+                        },
+                        integer: {
+                            message: '*请输入正确的数字'
+                        }
+                    }
+                }
+            }
+        })
+        .find('button[data-toggle]')
+        .on('click', function () {
+            var $target = $($(this).attr('data-toggle'));
+            $target.toggle();
+            if (!$target.is(':visible')) {
+                $('#togglingForm').data('bootstrapValidator').disableSubmitButtons(false);
+            }
+        });
+
+        $('select[name="coupons_type"]').change(function(e) {
+            var val = $(this).val();
+            if(val==2){
+                get_column('#coupon_cid');
+                $('.show-box').show();
+            }else{
+                $('.show-box').hide();
+            }
+        });
+        $('select[name="coupon_cid"]').change(function(e) {
+            var val = $(this).val();
+            get_goods(val,'#coupon_pid');
+        });
+
+    });
+    function get_column(obj){
+        obj = $(obj);
+        obj.empty();
+        var html = "<option value=\"-1\">-----选择栏目-----</option>";
+        $.getJSON('__URL__/get_columns',function(result){
+            for (var i = 0; i < result.length; i++) {
+               html += "<option value=\""+result[i].id+"\">"+result[i].title+"</option>";
+            }
+            obj.html(html);
+        });
+    }
+    function get_goods(id,obj){
+        obj = $(obj);
+        obj.empty();
+        var html = "<option value=\"-1\">-----选择物品-----</option>";
+        $.getJSON('__URL__/get_goods',{id:id},function(result){
+            for (var i = 0; i < result.length; i++) {
+                if(result[i].title!=null){
+                    html += "<option value=\""+result[i].id+"\">"+result[i].title+"</option>";
+                }
+            }
+            obj.html(html);
+        });
+    }
+</script>
+<include file="public/footer"/>
