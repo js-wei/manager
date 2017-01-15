@@ -4,8 +4,39 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "d2c9c19574c0945a667f58aeec40ed33",
+    "content-hash": "07d73e8cc4e5b619aa2fb672315cac68",
     "packages": [
+        {
+            "name": "jaeger/http",
+            "version": "1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jae-jae/Http.git",
+                "reference": "5a301b83254c9552ca9a9c0fb99523df8e799fba"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jae-jae/Http/zipball/5a301b83254c9552ca9a9c0fb99523df8e799fba",
+                "reference": "5a301b83254c9552ca9a9c0fb99523df8e799fba",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "QL\\Ext\\Lib\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "HTTP 请求类,修改用于QueryList(http://querylist.cc )",
+            "time": "2016-09-21T06:09:50+00:00"
+        },
         {
             "name": "jaeger/phpquery-single",
             "version": "0.9.7",
@@ -91,6 +122,76 @@
                 "spider"
             ],
             "time": "2016-01-06T07:56:03+00:00"
+        },
+        {
+            "name": "jaeger/querylist-ext-aquery",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jae-jae/QueryList-Ext-AQuery.git",
+                "reference": "bfbf417363bb8f0caec2573f02d24ba2e921aeef"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jae-jae/QueryList-Ext-AQuery/zipball/bfbf417363bb8f0caec2573f02d24ba2e921aeef",
+                "reference": "bfbf417363bb8f0caec2573f02d24ba2e921aeef",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "QL\\Ext\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jaeger",
+                    "email": "hj.q@qq.com"
+                }
+            ],
+            "description": "QueryList扩展，AQuery扩展基类",
+            "time": "2016-01-06T07:51:20+00:00"
+        },
+        {
+            "name": "jaeger/querylist-ext-request",
+            "version": "1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jae-jae/QueryList-Ext-Request.git",
+                "reference": "27d06b35fb810b919d242a3dbbdac0e1cb838bc4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jae-jae/QueryList-Ext-Request/zipball/27d06b35fb810b919d242a3dbbdac0e1cb838bc4",
+                "reference": "27d06b35fb810b919d242a3dbbdac0e1cb838bc4",
+                "shasum": ""
+            },
+            "require": {
+                "jaeger/http": "^1.0",
+                "jaeger/querylist-ext-aquery": "^1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "QL\\Ext\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jaeger",
+                    "email": "hj.q@qq.com"
+                }
+            ],
+            "description": "QueryList扩展，Request网络操作扩展",
+            "time": "2015-12-28T06:24:02+00:00"
         },
         {
             "name": "topthink/framework",
