@@ -57,6 +57,7 @@ class Gather extends Base{
 		$data = $this->_get_content_rule();
 		unset($param['rule']);
 		$param['rule']=json_encode($data);
+		
 		if($id){
 			$param['dates']=time();
 			if(!db('gather')->update($param)){

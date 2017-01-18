@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: 2017-01-13 17:50:14
+-- Generation Time: 2017-01-18 10:53:20
 -- 服务器版本： 5.5.48-log
 -- PHP Version: 5.6.22
 
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `think_admin` (
 --
 
 INSERT INTO `think_admin` (`id`, `gid`, `username`, `password`, `hash`, `status`, `date`, `last_date`, `last_ip`) VALUES
-(1, -1, '524314430@qq.com', 'ba59abbe56e057f', '', 0, 1476171916, 1484277947, '192.168.134.101');
+(1, -1, '524314430@qq.com', 'ba59abbe56e057f', '', 0, 1476171916, 1484706501, '192.168.134.101');
 
 -- --------------------------------------------------------
 
@@ -389,6 +389,31 @@ INSERT INTO `think_flink` (`id`, `title`, `name`, `description`, `ico`, `uri`, `
 -- --------------------------------------------------------
 
 --
+-- 表的结构 `think_gather`
+--
+
+CREATE TABLE IF NOT EXISTS `think_gather` (
+  `id` int(11) NOT NULL COMMENT '主键自增',
+  `title` varchar(50) DEFAULT NULL COMMENT '标题',
+  `description` varchar(250) DEFAULT NULL COMMENT '描述',
+  `url` varchar(150) DEFAULT NULL COMMENT '采集地址',
+  `rule` varchar(1500) DEFAULT NULL COMMENT '采集规则',
+  `type` int(11) NOT NULL COMMENT '类型',
+  `status` int(11) NOT NULL DEFAULT '0' COMMENT '状态;0正常,1禁用',
+  `date` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
+  `dates` int(11) NOT NULL DEFAULT '0' COMMENT '时间戳'
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='采集规则表';
+
+--
+-- 转存表中的数据 `think_gather`
+--
+
+INSERT INTO `think_gather` (`id`, `title`, `description`, `url`, `rule`, `type`, `status`, `date`, `dates`) VALUES
+(1, '腾讯新闻采集规则', '腾讯新闻采集规则是根据腾讯的滚动新闻动态采集新闻,并根据类别进行保存新闻', 'http://roll.news.qq.com/interface/roll.php?0.25121977164547493&cata=&site=news&date=&page=1&mode=1&of=json', '{"list":{"tit":["span.t-tit","text"],"title":["a","text"],"href":["a","href"]},"content":{"title":[".hd>h1","text"],"author":["span[bosszone=\\"jgname\\"]","text"],"content":["#Cnt-Main-Article-QQ","html"],"date":[".a_time","text"]}}', 1, 0, 1484707581, 0);
+
+-- --------------------------------------------------------
+
+--
 -- 表的结构 `think_genre`
 --
 
@@ -462,7 +487,7 @@ CREATE TABLE IF NOT EXISTS `think_model` (
   `status` int(10) NOT NULL COMMENT '状态:0正常,1锁定',
   `date` int(10) NOT NULL COMMENT '添加日期',
   `dates` int(10) NOT NULL COMMENT '修改日期'
-) ENGINE=MyISAM AUTO_INCREMENT=35 DEFAULT CHARSET=utf8 COMMENT='控制器';
+) ENGINE=MyISAM AUTO_INCREMENT=37 DEFAULT CHARSET=utf8 COMMENT='控制器';
 
 --
 -- 转存表中的数据 `think_model`
@@ -486,7 +511,9 @@ INSERT INTO `think_model` (`id`, `fid`, `title`, `name`, `info`, `ico`, `pic`, `
 (31, 0, 'coupons', '优惠券管理', '优惠券管理', 'fa-gift', '', 100, 0, 0, 1480663283, 1480662581),
 (32, 31, 'index', '优惠券管理', '优惠券管理', 'fa-gift', '', 100, 0, 0, 1480662652, 1482744593),
 (33, 0, 'comment', '评论管理', '评论管理', 'fa-comments', '', 100, 0, 0, 1484278050, 0),
-(34, 33, 'index', '评论管理', '评论管理', 'fa-comments', '', 100, 0, 0, 1484278109, 0);
+(34, 33, 'index', '评论管理', '评论管理', 'fa-comments', '', 100, 0, 0, 1484278109, 0),
+(35, 0, 'gather', '采集管理', '采集管理', 'fa-stack-exchange', '', 100, 0, 0, 1484706627, 0),
+(36, 35, 'index', '采集规则', '采集规则', 'fa-sitemap', '', 100, 0, 0, 1484706700, 0);
 
 -- --------------------------------------------------------
 
@@ -3159,6 +3186,12 @@ ALTER TABLE `think_flink`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `think_gather`
+--
+ALTER TABLE `think_gather`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `think_genre`
 --
 ALTER TABLE `think_genre`
@@ -3239,6 +3272,11 @@ ALTER TABLE `think_coupons`
 ALTER TABLE `think_flink`
   MODIFY `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT COMMENT '规则id,自增主键',AUTO_INCREMENT=6;
 --
+-- AUTO_INCREMENT for table `think_gather`
+--
+ALTER TABLE `think_gather`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键自增',AUTO_INCREMENT=2;
+--
 -- AUTO_INCREMENT for table `think_genre`
 --
 ALTER TABLE `think_genre`
@@ -3252,7 +3290,7 @@ ALTER TABLE `think_member`
 -- AUTO_INCREMENT for table `think_model`
 --
 ALTER TABLE `think_model`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键，自增长',AUTO_INCREMENT=35;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键，自增长',AUTO_INCREMENT=37;
 --
 -- AUTO_INCREMENT for table `think_weather_code`
 --

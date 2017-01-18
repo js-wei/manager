@@ -3,13 +3,14 @@ location / {
 		rewrite  ^(.*)$  /index.php?s=$1  last;
 		break;
 	}
-}
-if ( -f $request_filename) {
-    break;
+	if ( -f $request_filename) {
+	    break;
+	}
+
+	if (!-e $request_filename) {
+	    rewrite ^/index.php(.*)$ /index.php?s=$1 last;
+	    rewrite ^(.*)$ /index.php?s=$1 last;
+	    break;
+	}
 }
 
-if (!-e $request_filename) {
-    rewrite ^/index.php(.*)$ /index.php?s=$1 last;
-    rewrite ^(.*)$ /index.php?s=$1 last;
-    break;
-}

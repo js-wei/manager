@@ -77,8 +77,8 @@
 	                            <td>
 	                            	{$vo.title}
 	                            </td>
-	                            <td>
-	                                {$vo.description}
+	                            <td class="tips" data-role = "{$vo.description}">
+	                                {$vo.description|mb_substr=0,10}
 	                            </td>
 	                            <td class="tip" >
 	                                <a href="#" class="tips" data-role="{$vo.url}" data-type="0">查看规则</a>
@@ -162,30 +162,6 @@
 	            }
 	        });
 
-	    });
-	    $('.tips').on('click',function(e){
-	    	e.preventDefault();
-	    	var type = $(this).attr('data-type');
-	    	var data = $(this).attr('data-role');
-	    	
-	    	switch(type){
-	    		case '0':
-	    			layer.tips(data,$(this),{tips: [1, '#c00']});
-	    			break;
-	    		case '1':
-	    			$.post('__URL__/code',{id:data},function(result){
-	    				layer.open({
-						  type: 1,
-						  title: '新闻采集规则查询',
-						  shadeClose: true,
-						  shade: 0.8,
-						  area: ['50%', '500px'],
-						  content: result
-						}); 
-	    			});
-	    			break;
-	    	}
-	    	
 	    });
 	    $('#simpledatatable tbody tr .checkboxes').change(function () {
 	        $(this).parents('tr').toggleClass("active");
