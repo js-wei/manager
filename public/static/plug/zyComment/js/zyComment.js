@@ -176,7 +176,6 @@
 						para.callback(result);
 					});
 				});
-				
 			};
 			
 			/**

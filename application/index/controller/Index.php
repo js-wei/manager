@@ -54,10 +54,8 @@ class Index extends Base{
 					}
 					$_result[$k1] = $this->_get_content($v1['tit'],$v1['href'],$arr['content']);
 				}
-				
-				
 			}
-			$_result = array_filter($_result);
+			$_result = array_unique(array_filter($_result));
 			if(!empty($_result)){
 				if(!$_resuilt = db('article')->insertAll($_result)){
 					
@@ -132,9 +130,7 @@ class Index extends Base{
 			$return = $return['data']['article_info'];
 	    }
 		
-		$return=QueryList::Query($return,$rule,$block)->getData(function($item){
-	        return $item;
-	    });
+		$return=QueryList::Query($return,$rule,$block)->data;
 		return $return;
 	} 
 	/**
