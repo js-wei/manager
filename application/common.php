@@ -17,7 +17,7 @@
 function p($array){
 	dump($array,1,'<pre>',0);	
 }
-// cuplayer.com去除转义字符 
+//去除转义字符 
 function stripslashes_array(&$array) { 
 	while(list($key,$var) = each($array)) { 
 		if ($key != 'argc' && $key != 'argv' && (strtoupper($key) != $key || ''.intval($key) == "$key")) { 
@@ -31,7 +31,19 @@ function stripslashes_array(&$array) {
 	} 
 	return $array; 
 }
-
+/**
+ * 请注意服务器是否开通fopen配置
+ * @param $word
+ */
+function  log_result($word) {
+	$path = config('LOG_PATH');
+    $fp = fopen($path."/log.txt","a");
+	//strftime("%Y%m%d%H%M%S",time());
+    flock($fp, LOCK_EX) ;
+    fwrite($fp,"------------------------\n"."执行日期：".date("Y-m-d H:i:s",time())."\n".$word."\n------------------------\n"."\n\n");
+    flock($fp, LOCK_UN);
+    fclose($fp);
+}
 /**
  * 浏览器友好的变量输出
  * @param mixed $var 变量
@@ -656,15 +668,21 @@ function http($url, $postfields='', $method='GET', $headers=array()){
             if($postfields!='')curl_setopt($ci, CURLOPT_POSTFIELDS, $postfields);
         }
         $headers=!empty($headers)?$headers:["User-Agent: renrenPHP(piscdong.com)"];
+		
         curl_setopt($ci, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ci, CURLOPT_URL, $url);
         $response=curl_exec($ci);
         curl_close($ci);
+		
         $json_r=array();
         // 对页面内容进行编码
-     	$response=mb_convert_encoding($response, 'UTF-8', 'UTF-8,GBK,GB2312,BIG5');  
-        if($response!='')$json_r=json_decode($response, true);
-        return $json_r;
+     	$response=mb_convert_encoding($response, 'UTF-8', 'UTF-8,GBK,GB2312,BIG5'); 
+		
+		if(preg_match('/<!DOCTYPE html>/', $response,$matches)){  
+	       return $response;
+	    }else{
+	    	return json_decode($response, true);
+	    }
     }
 /**  
  * * 系统邮件发送函数  

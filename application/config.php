@@ -69,5 +69,5 @@ return [
         'ext'=>'jpg,png,gif,txt,zip,tar,xls,pdf,doc,docx'
     ],
     'ENCRYPT_KEY'=>'THINK',         //加密key
-    
+    'LOG_PATH'=>'/log',
 ];

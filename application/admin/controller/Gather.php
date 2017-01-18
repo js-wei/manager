@@ -24,12 +24,19 @@ class Gather extends Base{
 		if($id){
         	$vo = db('gather')->field('dates',true)->find($id);
         	$this->assign('info',$vo);
-			$vo['rule'] = json_decode($vo['rule'],true);
-			$list = $vo['rule']['list'];
-			$content = $vo['rule']['content'];
-			$this->assign('list',$list);
-			$this->assign('content',$content);
-			if(!empty($list)){
+			$rule = json_decode($vo['rule'],true);
+			
+			foreach($rule as $k => $v){
+				if($v){
+					foreach($v as $k1 => $v1){
+						$rule[$k][$k1] = implode('|',$v1);
+					}
+				}
+			}
+			
+			$this->assign('list',$rule['list']);
+			$this->assign('content',$rule['content']);
+			if(!empty($rule['list'])){
 				$type = 1;
 			}
 		}else{
@@ -39,6 +46,9 @@ class Gather extends Base{
 		$this->assign('model',$model);
 		return view();
 	}
+	/**
+	 * 查看规则
+	 */
 	public function code($id=0){
 		if($id){
 			$rule = db('gather')->field('title,rule')->find($id);	

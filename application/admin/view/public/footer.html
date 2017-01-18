@@ -82,7 +82,7 @@
 	                        var index = layer.load(2, {
 	                            shard: [0.6, "#000"]
 	                        });
-	                        $.post(url,{id:id,type:type},function(result){
+	                        $.post(url,{id:id,type:type,aid:"{:input('aid')}",p:"{:input('p')}"},function(result){
 	                            layer.close(index);
 	                            layer.alert(result.msg, {
 	                                icon: 6,
@@ -100,7 +100,7 @@
 	                    var index = layer.load(2, {
 	                        shard: [0.6, "#000"]
 	                    });
-	                    $.post(url,{id:id,type:type},function(result){
+	                    $.post(url,{id:id,type:type,aid:"{:input('aid')}",p:"{:input('p')}"},function(result){
 	                        layer.close(index);
 	                        layer.alert(result.msg, {
 	                            icon: 6,
@@ -123,7 +123,7 @@
 	                            var index = layer.load(2, {
 	                                shard: [0.6, "#000"]
 	                            });
-	                            $.post(url,{id:q,type:type},function(result){
+	                            $.post(url,{id:q,type:type,aid:"{:input('aid')}",p:"{:input('p')}"},function(result){
 	                                layer.close(index);
 	                                if (result.status==1) {
 	                                    layer.alert(result.msg, {
@@ -149,16 +149,16 @@
 	                    var index = layer.load(2, {
 	                        shard: [0.6, "#000"]
 	                    });
-	                    $.post(url,{id:q,type:type},function(result){
+	                    $.post(url,{id:q,type:type,aid:"{:input('aid')}",p:"{:input('p')}"},function(result){
 	                        layer.close(index);
 	                        layer.alert(result.msg, {
 	                            icon: 6,
 	                            end: function() {
-	                                if(result.redirect!=''){
-	                                    window.location.href=result.redirect;
-	                                }else{
-	                                    window.location.reload();
-	                                 }
+//	                                if(result.redirect!=''){
+//	                                    window.location.href=result.redirect;
+//	                                }else{
+//	                                    window.location.reload();
+//	                                 }
 	                            }
 	                        }); 
 	                    }); 

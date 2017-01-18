@@ -97,10 +97,11 @@ class Base extends Controller{
 	 * @return [type]              [description]
 	 */
     protected function _status($id,$model='',$t='',$img='image',$redirect=''){
-        $m=!empty($model)?db($model):db($this->controller);
         $id = $id?$id:input('k');
         $where['id']=array('in',$id);
         $redirect = $redirect?$redirect:Url('index');   //跳转地址
+        $m = db($model);
+		
         switch($t){
             case 'enable':            //启用
                 $result = $m->where($where)->update(array('status'=>0));

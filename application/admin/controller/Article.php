@@ -21,7 +21,7 @@ class article extends Base{
 		$this->assign('aid',$aid);
 		$this->assign('model',$model);
 		$this->assign('list',$list);
-		return $this->fetch();
+		return view();
 	}
 	/**
 	 * [add 添加视图]
