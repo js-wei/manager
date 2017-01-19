@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "fde5cc1e11c06b74e491bc9f098240bb",
+    "content-hash": "efa0f3f8b3345b81e77e379339245556",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -178,6 +178,43 @@
             "time": "2016-06-24T23:00:38+00:00"
         },
         {
+            "name": "jaeger/curlmulti",
+            "version": "1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jae-jae/CurlMulti.git",
+                "reference": "059f13241e15ddfe6155c032ef765e58233a5aab"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jae-jae/CurlMulti/zipball/059f13241e15ddfe6155c032ef765e58233a5aab",
+                "reference": "059f13241e15ddfe6155c032ef765e58233a5aab",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "QL\\Ext\\Lib\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Ares",
+                    "email": "admin@phpdr.net"
+                }
+            ],
+            "description": "CurlMulti是PHP多线程类库,修改用于QueryList(http://querylist.cc ),CurlMulti项目地址:https://github.com/ares333/php-curlmulti",
+            "time": "2015-12-23T16:28:22+00:00"
+        },
+        {
             "name": "jaeger/http",
             "version": "1.2",
             "source": {
@@ -326,6 +363,43 @@
             ],
             "description": "QueryList扩展，AQuery扩展基类",
             "time": "2016-01-06T07:51:20+00:00"
+        },
+        {
+            "name": "jaeger/querylist-ext-multi",
+            "version": "1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jae-jae/QueryList-Ext-Multi.git",
+                "reference": "2c633480411b1cea31d93b2c1b754eb0bc79fea8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jae-jae/QueryList-Ext-Multi/zipball/2c633480411b1cea31d93b2c1b754eb0bc79fea8",
+                "reference": "2c633480411b1cea31d93b2c1b754eb0bc79fea8",
+                "shasum": ""
+            },
+            "require": {
+                "jaeger/curlmulti": "^1.0",
+                "jaeger/querylist-ext-aquery": "^1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "QL\\Ext\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jaeger",
+                    "email": "hj.q@qq.com"
+                }
+            ],
+            "description": "QueryList扩展，Multi多线程扩展",
+            "time": "2015-12-28T06:09:36+00:00"
         },
         {
             "name": "jaeger/querylist-ext-request",

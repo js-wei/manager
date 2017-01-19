@@ -21,7 +21,7 @@ return [
     // 密码
     'password'       => '123456',
     // 数据库连接参数
-    'params'         => [['max_connections',3600]],
+    'params'         => [],
     // 数据库编码默认采用utf8
     'charset'        => 'utf8',
     // 数据库表前缀

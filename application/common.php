@@ -52,6 +52,8 @@ function strtotime1($str){
 	if(has_chiness($str)){
 		if(strstr($str,'前')){
 			$str = date('Y-m-d H:i:s',time());
+		}else if(trstr($str,'天')){
+			$str = date('Y-m-d H:i:s',time());
 		}else{
 			$str = preg_replace('/([{年}{月}{日}])/u','/',$str);
 		}

@@ -4,8 +4,17 @@ use QL\QueryList;
 use GuzzleHttp;
 class Index extends Base{
     public function index(){
-    	
+    	$list = db('gather')->where(['id'=>['gt',2]])->select();
 		
+		$rule=json_decode($list[0]['rule'],true);
+		
+		$links=[];
+		$tit=[];
+		foreach($list as $k=>$v){
+			$links[$k]=$v['url'];
+			$tit[$k]=$v['tit'];
+		}
+		$this->threading($links, $rule,$tit);
 	}
 	/**
 	 * 抓取数据
@@ -99,6 +108,45 @@ class Index extends Base{
 		$res = str_replace("'", '"',$res);
 		p(json_decode($res,true));die;
 	}
+	/**
+	 * 使用多线程
+	 */
+	protected function threading($links,$rule,$tit){
+		$list = $rule['list'];
+		$content = $rule['content'];
+		QueryList::run('Multi',[
+		    //待采集链接集合
+		    'list' =>$links,
+		    'curl' => [
+		        'opt' =>[
+		        	//这里根据自身需求设置curl参数
+                    CURLOPT_SSL_VERIFYPEER => false,
+                    CURLOPT_SSL_VERIFYHOST => false,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_AUTOREFERER => true,
+		        ],
+		        //设置线程数
+		        'maxThread' => 100,
+		        //设置最大尝试数
+		        'maxTry' => 3 
+		    ],
+		    'success' => function($a) use($list,$content){
+		    	
+		       $ql = QueryList::Query($a['content'],$list)->getData(function($item) use($content){
+		       		$item['content'] = $this->get_article($item['href'],$content);
+					unset($item['title']);
+					unset($item['href']);
+					return $item;
+		       });
+			  	p($ql);
+			   //$this->threading($ql,$content, $tit);
+		    }
+		]);
+	}
+	
+	
+	
+	
 	/**
 	 * 得到新闻路径
 	 */
