@@ -32,6 +32,34 @@ function stripslashes_array(&$array) {
 	return $array; 
 }
 /**
+ * 判断是否存在汉字
+ */
+function has_chiness($str){
+	if(preg_match('/^[\x{4e00}-\x{9fa5}]+$/u', $str)>0){
+	 	$flag= true;
+	}else if(preg_match('/[\x{4e00}-\x{9fa5}]/u', $str)>0){
+	  	$flag= true;
+	}else{
+		$flag =false;
+	}
+	return $flag;
+}
+/**
+ *日期转成时间戳
+ *含特殊的汉字日期
+ */
+function strtotime1($str){
+	if(has_chiness($str)){
+		if(strstr($str,'前')){
+			$str = date('Y-m-d H:i:s',time());
+		}else{
+			$str = preg_replace('/([{年}{月}{日}])/u','/',$str);
+		}
+		
+	}
+	return strtotime($str);
+}
+/**
  * 请注意服务器是否开通fopen配置
  * @param $word
  */

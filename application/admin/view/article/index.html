@@ -59,14 +59,14 @@
                                         </label>
                                     </div>
                                 </td>
-                                <td>
-                                    {$vo.title}
+                                <td class="tips" data-role = "{$vo.title}">
+                                    {$vo.title|mb_substr=0,10}
                                 </td>
-                                <td>
-                                    {$vo.author|default='官方发布'}
+                                <td class="tips" data-role = "{$vo.author}">
+                                    {$vo.author|mb_substr=0,10}
                                 </td>
-                                <td>{$vo.keywords|mb_substr=0,20}</td>
-                                <td>{$vo.description|mb_substr=0,20}</td>
+                                <td class="tips" data-role = "{$vo.keywords}">{$vo.keywords|mb_substr=0,10}</td>
+                                <td class="tips" data-role = "{$vo.description}">{$vo.description|mb_substr=0,10}</td>
                                 <td>
                                     <eq name="vo.com" value="1"><span class="label label-primary ml10">推荐</span></eq>
                                     <eq name="vo.hot" value="1"><span class="label label-info ml10">最热</span></eq>

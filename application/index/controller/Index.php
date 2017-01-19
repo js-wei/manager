@@ -4,69 +4,54 @@ use QL\QueryList;
 use GuzzleHttp;
 class Index extends Base{
     public function index(){
-//  	$list = db('gather')->field('dates',true)->find(2);	
-//		
-//		$url = $list['url'];
-//		$arr = json_decode($list['rule'],true);
-//		$rule = [
-//			'title'=>['.comListBox>h2>a','text'],
-//			'href'=>['.comListBox>h2>a','href']
-//		];
-//		$result = $this->get_news_list($url,$arr['list']);
-//		
-//		foreach($result as $k1 => $v1){
-//			if(!array_key_exists('tit',$v1)){
-//				$v1['tit']="军事";
-//			}
-//			$_count = db('article')->where(['title'=>$v1['title']])->count('*');
-//			
-//			if(!$_count){
-//				$_r=[
-//					'title'=>['h1#artical_topic','text'],
-//					'author'=>['span.ss03>a','text'],
-//					'content'=>['#main_content','html'],
-//					'data'=>['span.ss01','text'],
-//				];
-//				$_result[$k1] = $this->_get_content($v1['tit'],$v1['href'],$_r);
-//			}
-//		}
-//		$_result = array_filter($_result);
-//		if(!empty($_result)){
-//			if(!$_resuilt = db('article')->insertAll($_result)){
-//				
-//			}
-//		}
+    	
 		
 	}
-	
+	/**
+	 * 抓取数据
+	 * @author 魏巍
+	 */
 	public function pull(){
 		$list = db('gather')->field('dates',true)->where(['status'=>0])->select();
+		
 		foreach($list as $k => $v){
 			$arr = json_decode($v['rule'],true);
 			$result = $this->get_news_list($v['url'],$arr['list']);
 			
 			foreach($result as $k1 => $v1){
+				
 				$article = db('article')->where(['title'=>$v1['title']])->count();
+				//$_time = explode(' ', $v1['time']);
 				
 				if($article<1){
 					if(!array_key_exists('tit',$v1)){
 						$v1['tit']=$v['tit'];
+						$v1['time']='';
 					}
-					$_result[$k1] = $this->_get_content($v1['tit'],$v1['href'],$arr['content']);
-				}
-			}
-			$_result = array_unique(array_filter($_result));
-			if(!empty($_result)){
-				if(!$_resuilt = db('article')->insertAll($_result)){
 					
+					if(count($v1)>2 && !empty($v1['time'])){
+						$v1['time'] =date('Y')."-".$v1['time'];
+					}
+					
+					ksort($v1);
+					$_result[$k1] = $this->_get_content($v1['tit'],$v1['href'],$arr['content'],$v1['time']);
 				}
 			}
+			
+		}
+		$_result = array_filter($_result);
+
+		if(!empty($_result)){
+			if(!$count = db('article')->insertAll($_result)){
+				
+			}
+			p($count);
 		}
 	}
 	/**
 	 * 抓取内容
 	 */
-	public function _get_content($type,$href,$rule){
+	public function _get_content($type,$href,$rule,$time){
 		$str = preg_replace('/[\[\]\{\}]/','',$type);	//去掉[]{}
 		$column = db('column');
 		$article = db('article');
@@ -74,7 +59,7 @@ class Index extends Base{
 		$column_id = $column->field('id,keywords,description')->where(['title'=>$str])->find();
 		
 		if($str!='图片'){
-			$article = $this->get_article($href,$rule);
+			$article = $this->get_article($href,$rule,$time);
 			
 			if(count($article)){
 				$_result = [];
@@ -85,7 +70,8 @@ class Index extends Base{
 				$article['description']=$column_id['description']."_".$column_id['description'];
 				#$article['path']=$href;
 				#$article['tit']=$type;
-				$article['date']=strtotime($article['date']);
+				
+				$article['date']=strtotime1($article['date']);
 			}
 		}
 		return $article;
@@ -137,8 +123,25 @@ class Index extends Base{
 	 * @author 魏巍
 	 * @description 获取详细的文档
 	 */
-    protected function get_article($url='',$rule='',$block=''){
-		$ql = QueryList::Query($url,$rule,$block,'UTF-8','GB2312',true)->data;
-		return $ql;
+    protected function get_article($url='',$rule='',$time='',$block=''){
+    	//实例化一个Http客户端
+		$client = new GuzzleHttp\Client();
+		
+		$response = $client->request('GET', $url,[
+			'headers' => [
+			 	'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36 OPR/42.0.2393.94',
+		        'Accept'     => 'application/json',
+		        'Content-Encoding' => 'gzip, deflate', 
+		        'Content-Type' => 'application/javascript;charset=UTF-8',
+		    ]
+		]);
+		$response = mb_convert_encoding($response->getBody(), 'UTF-8', 'UTF-8,GBK,GB2312,BIG5');
+		$ql = QueryList::Query($response,$rule,$block)->data;
+		if(!empty($ql) ){
+			if(!empty($time) && count($ql[0])==3){
+				$ql[0]['date']=$time;
+			}
+			return $ql;
+		}
 	}
 }
