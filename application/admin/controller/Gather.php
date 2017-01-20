@@ -9,6 +9,10 @@ class Gather extends Base{
 	public function index(){
 		$model = ['name'=>'文章采集'];
 		$list = db('gather')->paginate(10);
+		foreach($list as $k=>$v){
+			$v['url'] = implode('<br/>', explode(',', $v['url']));
+			$list[$k]=$v;
+		}
 		// 查询状态为1的用户数据 并且每页显示10条数据
 		$count = db('gather')->count('*');
 		$this->assign('count',$count);

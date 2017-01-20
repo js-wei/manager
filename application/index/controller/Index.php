@@ -4,6 +4,13 @@ use QL\QueryList;
 use GuzzleHttp;
 class Index extends Base{
     public function index(){
+    	$list = db('gather')->where(['status'=>0])->select();
+		
+		foreach($list as $k=>$v){
+			$links=explode(',', $v['url']);
+			$rule=json_decode($v['rule'],true);
+			$this->threading($links, $rule);
+		}
 	}
 	/**
 	 * 抓取数据
@@ -104,42 +111,91 @@ class Index extends Base{
 	protected function threading($links,$rule){
 		$list = $rule['list'];
 		$content = $rule['content'];
-		QueryList::run('Multi',[
-		    //待采集链接集合
-		    'list' =>$links,
-		    'curl' => [
-		        'opt' =>[
-		        	//这里根据自身需求设置curl参数
-                    CURLOPT_SSL_VERIFYPEER => false,
-                    CURLOPT_SSL_VERIFYHOST => false,
-                    CURLOPT_FOLLOWLOCATION => true,
-                    CURLOPT_AUTOREFERER => true,
-		        ],
-		        //设置线程数
-		        'maxThread' => 100,
-		        //设置最大尝试数
-		        'maxTry' => 3 
-		    ],
-		    'success' => function($a) use($list,$content){
-		       $ql = QueryList::Query($a['content'],$list)->getData(function($item) use($content){
-		       		$item= $this->get_article($item['href'],$content)[0];
-					$article = db('article')->where(['title'=>$item['title']])->count('*');
-					if(!$article){
-						$item['date'] = strtotime1($item['date']);
-						$column = db('column')->field('id,title,keywords,description')->where(['title'=>$item['tit']])->find();
-						$item['content']=htmlspecialchars($item['content']);		
-						$item['column_id']=$column['id'];
-						$item['keywords']=$item['title']."_".$column['keywords'];
-						$item['description']=$item['title']."_".$column['description'];
-						unset($item['tit']);
-						$id = db('article')->insert($item);
-					}
-		       });
-		    },
-		    'error'=>function(){
-		    	echo "执行出错了";
-		    }
-		]);
+		try{
+			QueryList::run('Multi',[
+			    //待采集链接集合
+			    'list' =>$links,
+			    'curl' => [
+			        'opt' =>[
+			        	//这里根据自身需求设置curl参数
+	                    CURLOPT_SSL_VERIFYPEER => false,
+	                    CURLOPT_SSL_VERIFYHOST => false,
+	                    CURLOPT_FOLLOWLOCATION => true,
+	                    CURLOPT_AUTOREFERER => true,
+			        ],
+			        //设置线程数
+			        'maxThread' => 200,
+			        //设置最大尝试数
+			        'maxTry' => 5 
+			    ],
+			    'success' => function($a) use($list,$content,$links){
+			    	$response = mb_convert_encoding($a['content'], 'UTF-8', 'UTF-8,GBK,GB2312,BIG5');
+			    	if(count($links)==1){
+						if(strstr($links[0],'json')){
+							$response = json_decode($response,true);
+							$a['content'] = $response['data']['article_info'];
+						}
+			    	}
+			        $ql = QueryList::Query($a['content'],$list)->getData(function($item) use($content){
+			        	$item1= $this->get_article($item['href'],$content)[0];
+						$map=[];
+			        	if(key_exists('tit', $item)){
+							$str = preg_replace('/[\[\]\{\}]/','',$item['tit']);
+							$map['title']=$str;
+						}else{
+							$map['title']=$item1['tit'];
+						}
+						if(!strstr($map['title'],'图')){
+							if(key_exists('tit', $item)){
+								$str = preg_replace('/[\[\]\{\}]/','',$item['tit']);
+								$map['title']=$str;
+							}else{
+								$map['title']=$item1['tit'];
+							}
+							$article = db('article')->where(['title'=>$item1['title']])->count('*');
+							$column = db('column')->field('id,title,keywords,description')->where($map)->find();
+							
+							if(!$article){
+								$item1['date'] = strtotime1($item1['date']);
+								$item1['content']=htmlspecialchars($item1['content']);		
+								$item1['column_id']=$column['id'];
+								$item1['keywords']=$item1['title']."_".$column['keywords'];
+								$item1['description']=$item1['title']."_".$column['description'];
+								unset($item['tit']);
+								$id = db('article')->insert($item1);
+							}
+						}
+						
+						
+						
+						/*
+						if(key_exists('tit', $item)){
+							$str = preg_replace('/[\[\]\{\}]/','',$item['tit']);
+							$map['title']=$str;
+						}else{
+							$map['title']=$item1['tit'];
+						}
+						$article = db('article')->where(['title'=>$item1['title']])->count('*');
+						$column = db('column')->field('id,title,keywords,description')->where($map)->find();
+						
+						if(!$article){
+							$item1['date'] = strtotime1($item1['date']);
+							$item1['content']=htmlspecialchars($item1['content']);		
+							$item1['column_id']=$column['id'];
+							$item1['keywords']=$item1['title']."_".$column['keywords'];
+							$item1['description']=$item1['title']."_".$column['description'];
+							unset($item['tit']);
+							$id = db('article')->insert($item1);
+						}*/
+			       });
+			    },
+			    'error'=>function(){
+			    	echo "执行出错了";
+			    }
+			]);
+		}catch(Exception $e) {
+			
+		}
 	}
 	
 	/**
@@ -162,6 +218,24 @@ class Index extends Base{
 		$return=QueryList::Query($return,$rule,$block)->data;
 		return $return;
 	} 
+	
+	/**
+	 * 采集文档列表
+	 */
+	protected function get_article_list($url='',$rule='',$block=''){
+		$client = new GuzzleHttp\Client();
+		$response = $client->request('GET', $url,[
+			'headers' => [
+			 	'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36 OPR/42.0.2393.94',
+		        'Accept'     => 'application/json',
+		        'Content-Encoding' => 'gzip, deflate', 
+		        'Content-Type' => 'application/javascript;charset=UTF-8',
+		    ]
+		]);
+		$response = mb_convert_encoding($response->getBody(), 'UTF-8', 'UTF-8,GBK,GB2312,BIG5');
+		
+	}
+	
 	/**
 	 * @author 魏巍
 	 * @description 获取详细的文档

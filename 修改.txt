@@ -1,0 +1,4 @@
+但最重要的是程序里要设置好超不要使用php-fpm的request_terminate_timeout，
+
+/usr/local/php/etc/php-fpm.conf
+request_terminate_timeout=0;

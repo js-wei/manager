@@ -22,7 +22,11 @@
                 <div class="form-group">
                     <label class="col-lg-1 control-label">文章采集地址<sup>*</sup></label>
                     <div class="col-lg-4">
-                        <input type="url" name="url" value="<notempty name="info">{$info.url}</notempty>" class="form-control" id="url" placeholder="文章采集地址"/>
+                        <!--<input type="url" name="url" value="<notempty name="info">{$info.url}</notempty>" class="form-control" id="url" placeholder="文章采集地址"/>-->
+                        <textarea name="url" rows="6" id="url" class="form-control" placeholder="文章采集地址"><notempty name="info">{$info.url}</notempty></textarea>
+                        <div class="text-danger">
+                        	*多个使用","隔开
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
