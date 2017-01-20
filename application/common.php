@@ -66,6 +66,9 @@ function strtotime1($str){
 		}else if(strstr($str,'月前')){
 			$d = strtotime('-'.$result.' months');
 			$str = date('Y-m-d H:i:s',$d);
+		}else if(strstr($str,'年前')){
+			$d = strtotime('-'.$result.' year');
+			$str = date('Y-m-d H:i:s',$d);
 		}else{
 			$str = preg_replace('/([{年}{月}{日}])/u','/',$str);
 		}
