@@ -41,19 +41,7 @@ class Index extends Base{
 			 db('article')->insertAll($_result);
 		}
 	}
-	/**
-	 * 相同规则抓取
-	 */
-	public function pull1(){
-		$list = db('gather')->where(['id'=>['gt',2],'status'=>0])->select();
-		$rule=json_decode($list[0]['rule'],true);
-		$links=[];
-		foreach($list as $k=>$v){
-			$links[$k]=$v['url'];
-		}
-		$this->threading($links, $rule);
-	}
-	
+
 	/**
 	 * 抓取内容
 	 */
@@ -138,6 +126,7 @@ class Index extends Base{
 			    	}
 			        $ql = QueryList::Query($a['content'],$list)->getData(function($item) use($content){
 			        	$item1= $this->get_article($item['href'],$content)[0];
+						
 						$map=[];
 			        	if(key_exists('tit', $item)){
 							$str = preg_replace('/[\[\]\{\}]/','',$item['tit']);
@@ -150,43 +139,25 @@ class Index extends Base{
 								$str = preg_replace('/[\[\]\{\}]/','',$item['tit']);
 								$map['title']=$str;
 							}else{
-								$map['title']=$item1['tit'];
+								$map['title']=$item1['tit'];unset($item1['tit']);
 							}
 							$article = db('article')->where(['title'=>$item1['title']])->count('*');
 							$column = db('column')->field('id,title,keywords,description')->where($map)->find();
 							
-							if(!$article){
-								$item1['date'] = strtotime1($item1['date']);
+							if(!$article && !empty($item1)){
+								if(key_exists('date', $item1)){
+									$item1['date'] = strtotime1($item1['date']);
+								}else{
+									$item1['date'] = strtotime1($item1['date1']);unset($item1['date1']);
+								}
 								$item1['content']=htmlspecialchars($item1['content']);		
 								$item1['column_id']=$column['id'];
 								$item1['keywords']=$item1['title']."_".$column['keywords'];
 								$item1['description']=$item1['title']."_".$column['description'];
-								unset($item['tit']);
 								$id = db('article')->insert($item1);
 							}
 						}
 						
-						
-						
-						/*
-						if(key_exists('tit', $item)){
-							$str = preg_replace('/[\[\]\{\}]/','',$item['tit']);
-							$map['title']=$str;
-						}else{
-							$map['title']=$item1['tit'];
-						}
-						$article = db('article')->where(['title'=>$item1['title']])->count('*');
-						$column = db('column')->field('id,title,keywords,description')->where($map)->find();
-						
-						if(!$article){
-							$item1['date'] = strtotime1($item1['date']);
-							$item1['content']=htmlspecialchars($item1['content']);		
-							$item1['column_id']=$column['id'];
-							$item1['keywords']=$item1['title']."_".$column['keywords'];
-							$item1['description']=$item1['title']."_".$column['description'];
-							unset($item['tit']);
-							$id = db('article')->insert($item1);
-						}*/
 			       });
 			    },
 			    'error'=>function(){

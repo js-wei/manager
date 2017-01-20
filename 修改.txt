@@ -1,4 +1,7 @@
 但最重要的是程序里要设置好超不要使用php-fpm的request_terminate_timeout，
-
+502 Bad Gateway
 /usr/local/php/etc/php-fpm.conf
 request_terminate_timeout=0;
+Too many connections
+/etc/my.cnf
+max_connections=N
