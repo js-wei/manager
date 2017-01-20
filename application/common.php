@@ -52,18 +52,20 @@ function strtotime1($str){
 	if(has_chiness($str)){
 		$result = preg_replace('/([\x80-\xff]*)/i','',$str);	//去掉汉字
 		if(strstr($str,'小时前')){
-			$str = date('Y-m-d H:i:s',time()-$result*60*60);
+			$d = strtotime('-'.$result.' hour');
+			$str = date('Y-m-d H:i:s',$d);
 		}else if(strstr($str,'秒前')){
-			$str = date('Y-m-d H:i:s',time()-$result);
+			$d = strtotime('-'.$result.' second');
+			$str = date('Y-m-d H:i:s',$d);
 		}else if(strstr($str,'分钟前')){
-			$str = date('Y-m-d H:i:s',time()-$result*60);
+			$d = strtotime('-'.$result.' minute');
+			$str = date('Y-m-d H:i:s',$d);
 		}else if(strstr($str,'天前')){
-			$str = date('Y-m-d H:i:s',time()-$result*60*60*24);
+			$d = strtotime('-'.$result.' day');
+			$str = date('Y-m-d H:i:s',$d);
 		}else if(strstr($str,'月前')){
-			$m = date('m',time());
-			$y = date('Y',time());
-			$d=date('j',mktime(0,0,1,($m==12?1:$m+1),1,($m==12?$y+1:$y))-24*3600);
-			$str = date('Y-m-d H:i:s',time()-$result*60*60*24*31);
+			$d = strtotime('-'.$result.' months');
+			$str = date('Y-m-d H:i:s',$d);
 		}else{
 			$str = preg_replace('/([{年}{月}{日}])/u','/',$str);
 		}
@@ -71,22 +73,6 @@ function strtotime1($str){
 	return strtotime($str);
 }
 
-
-
-
-/**
- * 请注意服务器是否开通fopen配置
- * @param $word
- */
-function  log_result($word) {
-	$path = config('LOG_PATH');
-    $fp = fopen($path."/log.txt","a");
-	//strftime("%Y%m%d%H%M%S",time());
-    flock($fp, LOCK_EX) ;
-    fwrite($fp,"------------------------\n"."执行日期：".date("Y-m-d H:i:s",time())."\n".$word."\n------------------------\n"."\n\n");
-    flock($fp, LOCK_UN);
-    fclose($fp);
-}
 /**
  * 浏览器友好的变量输出
  * @param mixed $var 变量

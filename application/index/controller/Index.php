@@ -9,7 +9,7 @@ class Index extends Base{
 		foreach($list as $k=>$v){
 			$links=explode(',', $v['url']);
 			$rule=json_decode($v['rule'],true);
-			$this->threading($links, $rule);
+			p($this->threading($links, $rule));
 		}
 	}
 	/**
@@ -155,9 +155,9 @@ class Index extends Base{
 								$item1['keywords']=$item1['title']."_".$column['keywords'];
 								$item1['description']=$item1['title']."_".$column['description'];
 								$id = db('article')->insert($item1);
+								return $id;
 							}
 						}
-						
 			       });
 			    },
 			    'error'=>function(){
@@ -198,9 +198,9 @@ class Index extends Base{
 		$response = $client->request('GET', $url,[
 			'headers' => [
 			 	'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36 OPR/42.0.2393.94',
-		        'Accept'     => 'application/json',
+		        'Accept'     => 'application/default',
 		        'Content-Encoding' => 'gzip, deflate', 
-		        'Content-Type' => 'application/javascript;charset=UTF-8',
+		        'Content-Type' => 'application/default;charset=UTF-8',
 		    ]
 		]);
 		$response = mb_convert_encoding($response->getBody(), 'UTF-8', 'UTF-8,GBK,GB2312,BIG5');
@@ -220,7 +220,7 @@ class Index extends Base{
 			 	'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36 OPR/42.0.2393.94',
 		        'Accept'     => 'application/json',
 		        'Content-Encoding' => 'gzip, deflate', 
-		        'Content-Type' => 'application/javascript;charset=UTF-8',
+		        'Content-Type' => 'application/default;charset=UTF-8',
 		    ]
 		]);
 		$response = mb_convert_encoding($response->getBody(), 'UTF-8', 'UTF-8,GBK,GB2312,BIG5');
