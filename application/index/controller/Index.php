@@ -4,59 +4,49 @@ use QL\QueryList;
 use GuzzleHttp;
 class Index extends Base{
     public function index(){
-    	$list = db('gather')->where(['id'=>['gt',2]])->select();
-		
-		$rule=json_decode($list[0]['rule'],true);
-		
-		$links=[];
-		$tit=[];
-		foreach($list as $k=>$v){
-			$links[$k]=$v['url'];
-			$tit[$k]=$v['tit'];
-		}
-		$this->threading($links, $rule,$tit);
 	}
 	/**
 	 * 抓取数据
 	 * @author 魏巍
 	 */
 	public function pull(){
-		$list = db('gather')->field('dates',true)->where(['status'=>0])->select();
-		
+		$list = db('gather')->field('dates',true)->where(['id'=>['lt',2],'status'=>0])->select();
 		foreach($list as $k => $v){
 			$arr = json_decode($v['rule'],true);
 			$result = $this->get_news_list($v['url'],$arr['list']);
-			
 			foreach($result as $k1 => $v1){
-				
 				$article = db('article')->where(['title'=>$v1['title']])->count();
-				//$_time = explode(' ', $v1['time']);
-				
-				if($article<1){
+				if(!$article){
 					if(!array_key_exists('tit',$v1)){
 						$v1['tit']=$v['tit'];
 						$v1['time']='';
 					}
-					
 					if(count($v1)>2 && !empty($v1['time'])){
 						$v1['time'] =date('Y')."-".$v1['time'];
 					}
-					
 					ksort($v1);
 					$_result[$k1] = $this->_get_content($v1['tit'],$v1['href'],$arr['content'],$v1['time']);
 				}
 			}
-			
 		}
 		$_result = array_filter($_result);
-
 		if(!empty($_result)){
-			if(!$count = db('article')->insertAll($_result)){
-				
-			}
-			p($count);
+			 db('article')->insertAll($_result);
 		}
 	}
+	/**
+	 * 相同规则抓取
+	 */
+	public function pull1(){
+		$list = db('gather')->where(['id'=>['gt',2],'status'=>0])->select();
+		$rule=json_decode($list[0]['rule'],true);
+		$links=[];
+		foreach($list as $k=>$v){
+			$links[$k]=$v['url'];
+		}
+		$this->threading($links, $rule);
+	}
+	
 	/**
 	 * 抓取内容
 	 */
@@ -111,7 +101,7 @@ class Index extends Base{
 	/**
 	 * 使用多线程
 	 */
-	protected function threading($links,$rule,$tit){
+	protected function threading($links,$rule){
 		$list = $rule['list'];
 		$content = $rule['content'];
 		QueryList::run('Multi',[
@@ -131,21 +121,26 @@ class Index extends Base{
 		        'maxTry' => 3 
 		    ],
 		    'success' => function($a) use($list,$content){
-		    	
 		       $ql = QueryList::Query($a['content'],$list)->getData(function($item) use($content){
-		       		$item['content'] = $this->get_article($item['href'],$content);
-					unset($item['title']);
-					unset($item['href']);
-					return $item;
+		       		$item= $this->get_article($item['href'],$content)[0];
+					$article = db('article')->where(['title'=>$item['title']])->count('*');
+					if(!$article){
+						$item['date'] = strtotime1($item['date']);
+						$column = db('column')->field('id,title,keywords,description')->where(['title'=>$item['tit']])->find();
+						$item['content']=htmlspecialchars($item['content']);		
+						$item['column_id']=$column['id'];
+						$item['keywords']=$item['title']."_".$column['keywords'];
+						$item['description']=$item['title']."_".$column['description'];
+						unset($item['tit']);
+						$id = db('article')->insert($item);
+					}
 		       });
-			  	p($ql);
-			   //$this->threading($ql,$content, $tit);
+		    },
+		    'error'=>function(){
+		    	echo "执行出错了";
 		    }
 		]);
 	}
-	
-	
-	
 	
 	/**
 	 * 得到新闻路径

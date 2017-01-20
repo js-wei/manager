@@ -50,17 +50,30 @@ function has_chiness($str){
  */
 function strtotime1($str){
 	if(has_chiness($str)){
-		if(strstr($str,'前')){
-			$str = date('Y-m-d H:i:s',time());
-		}else if(trstr($str,'天')){
-			$str = date('Y-m-d H:i:s',time());
+		$result = preg_replace('/([\x80-\xff]*)/i','',$str);	//去掉汉字
+		if(strstr($str,'小时前')){
+			$str = date('Y-m-d H:i:s',time()-$result*60*60);
+		}else if(strstr($str,'秒前')){
+			$str = date('Y-m-d H:i:s',time()-$result);
+		}else if(strstr($str,'分钟前')){
+			$str = date('Y-m-d H:i:s',time()-$result*60);
+		}else if(strstr($str,'天前')){
+			$str = date('Y-m-d H:i:s',time()-$result*60*60*24);
+		}else if(strstr($str,'月前')){
+			$m = date('m',time());
+			$y = date('Y',time());
+			$d=date('j',mktime(0,0,1,($m==12?1:$m+1),1,($m==12?$y+1:$y))-24*3600);
+			$str = date('Y-m-d H:i:s',time()-$result*60*60*24*31);
 		}else{
 			$str = preg_replace('/([{年}{月}{日}])/u','/',$str);
 		}
-		
 	}
 	return strtotime($str);
 }
+
+
+
+
 /**
  * 请注意服务器是否开通fopen配置
  * @param $word
