@@ -24,7 +24,7 @@ function get_member_nickname($id=0){
 	}else if(!empty($member['email'])){
 		return $member['email'];
 	}else{
-		return '';
+		return '匿名用户';
 	}
 }
 

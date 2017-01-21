@@ -5,3 +5,9 @@ request_terminate_timeout=0;
 Too many connections
 /etc/my.cnf
 max_connections=N
+Incorrect string value: '\xF0\x9F...' for column 'XXX' at row 1
+[mysqld]
+character-set-server=utf8mb4
+[mysql]
+default-character-set=utf8mb4
+将已经建好的表也转换成utf8mb4

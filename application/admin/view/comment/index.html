@@ -58,11 +58,11 @@
 	                                    </label>
 	                                </div>
 	                            </td>
-	                            <td class="tip" title="{$vo.aid|get_article_title}" >
-	                            	{$vo.aid|get_article_title}
+	                            <td class="tips" data-role="{$vo.aid|get_article_title}" >
+	                            	{$vo.aid|get_article_title|mb_substr=0,10}
 	                            </td>
-	                            <td>
-	                                {$vo.uid|get_member_nickname}
+	                            <td class="tips" data-role="{$vo.uid|get_member_nickname}">
+	                                {$vo.uid|get_member_nickname|mb_substr=0,10}
 	                            </td>
 	                            <td>
 	                                {$vo.content}
@@ -129,13 +129,13 @@
 	        "aaSorting": []
 	    });
 	    
-	    $('.table-striped>tbody>tr>td.tip').on('click',function(){
-	    	layer.tips($(this).attr('title'),$(this), {
-			  tips: [1, '#3595CC'],
-			  time: 4000
-			});
-	    });
-	    
+//	    $('.table-striped>tbody>tr>td.tip').on('click',function(){
+//	    	layer.tips($(this).attr('title'),$(this), {
+//			  tips: [1, '#3595CC'],
+//			  time: 4000
+//			});
+//	    });
+//	    
 	    $('#simpledatatable .group-checkable').change(function () {
 	        var set = $(".checkboxes");
 	        var checked = $(this).is(":checked");

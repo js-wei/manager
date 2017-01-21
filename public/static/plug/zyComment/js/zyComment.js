@@ -12,18 +12,18 @@
 		}
 
 		return this.each(function(){
+			
 			var para = {};    // 保留参数
 			var self = this;  // 保存组件对象
 			var fCode = 0;
 			
 			var defaults = {
-					"width":"355",
-					"height":"33",
-					"agoComment":[],  // 以往评论内容
-					"callback":function(comment){
-						
-					},
-					templet:'<div class="comment"><img src="{{head}}" alt="{{nickname}}" class="comment-avatar"><div class="comment-body"><div class="comment-text"><div class="comment-header"><a href="#" title="">{{nickname}}</a><span>{{date}}</span></div>{{content}}</div><div class="comment-footer"> <a href="#"><i class="fa fa-thumbs-o-up"></i>({{.love}})</a><a href="#"><i class="fa fa-thumbs-o-down"></i>({{seem}})</a></div></div></div>',
+				"width":"355",
+				"height":"33",
+				"agoComment":[],  // 以往评论内容
+				"callback":function(comment){},
+				'tpl':'<div id="comment{id}" class="comment"<a class="avatar"><img src="images/foot.png"></a><div class="content"><a class="author"{userName}</a><div class="metadata"><span class="date">{time}</span></div><div class="text">{content}</div><div class="actions"><a class="reply" href="javascript:void(0)" selfID="{id}" >回复</a></div></div></div>';
+
 			};
 			
 			para = $.extend(defaults,options);
@@ -52,22 +52,7 @@
 						topStyle = "topStyle";
 					}
 					
-					var item = '';
-					item += '<div id="comment'+v.id+'" class="comment">';
-					item += '	<a class="avatar">';
-					item += '		<img src="images/foot.png">';
-					item += '	</a>';
-					item += '	<div class="content '+topStyle+'">';
-					item += '		<a class="author"> '+v.userName+' </a>';
-					item += '		<div class="metadata">';
-					item += '			<span class="date"> '+v.time+' </span>';
-					item += '		</div>';
-					item += '		<div class="text"> '+v.content+' </div>';
-					item += '		<div class="actions">';
-					item += '			<a class="reply" href="javascript:void(0)" selfID="'+v.id+'" >回复</a>';
-					item += '		</div>';
-					item += '	</div>';
-					item += '</div>';
+					var item =dataTemplate(para.tpl,v);
 					
 					// 判断此条评论是不是子级评论
 					if(v.sortID==0){  // 不是
@@ -79,7 +64,6 @@
 							comments += '<div id="comments'+v.sortID+'" class="comments">';
 							comments += 	item;
 							comments += '</div>';
-							
 							$("#comment"+v.sortID).append(comments);
 						}else{  // 有
 							$("#comments"+v.sortID).append(item);
@@ -171,7 +155,8 @@
 						var result = {
 								"name":$("#userName").val(),
 								"email":$("#userEmail").val(),
-								"content":$("#commentContent").val()
+								"content":$("#commentContent").val(),
+								'':fCode
 						};
 						para.callback(result);
 					});
@@ -230,7 +215,8 @@
 					var result = {
 							"name":$("#userName").val(),
 							"email":$("#userEmail").val(),
-							"content":$("#commentContent").val()
+							"content":$("#commentContent").val(),
+							'fid':$("#submitComment").html(),
 					};
 					para.callback(result);
 				});
@@ -255,7 +241,7 @@
 				var boxHtml = '';
 				boxHtml += '<form id="replyBox" class="ui reply form">';
 				boxHtml += '	<div class="ui  form ">';
-				//boxHtml += '		<div class="two fields">'
+				boxHtml += '		<div class="two fields">'
 				boxHtml += '			<div class="field" >';
 				boxHtml += '				<input type="text" id="userName" />';
 				boxHtml += '				<label class="userNameLabel" for="userName">Your Name</label>';
@@ -264,12 +250,12 @@
 				boxHtml += '				<input type="text" id="userEmail" />';
 				boxHtml += '				<label class="userEmailLabel" for="userName">E-mail</label>';
 				boxHtml += '			</div>';
-				//boxHtml += '		</div>';
+				boxHtml += '		</div>';
 				boxHtml += '		<div class="contentField field" >';
 				boxHtml += '			<textarea id="commentContent"></textarea>';
 				boxHtml += '			<label class="commentContentLabel" for="commentContent">Content</label>';
 				boxHtml += '		</div>';
-				boxHtml += '		<div id="publicComment" class="ui button teal submit labeled icon">';
+				boxHtml += '		<div id="publicComment" data-id="'+id+'" class="ui button teal submit labeled icon">';
 				boxHtml += '			<i class="icon edit"></i> 提交评论';
 				boxHtml += '		</div>';
 				boxHtml += '	</div>';
@@ -298,7 +284,7 @@
 				boxHtml += '			<textarea id="commentContent"></textarea>';
 				boxHtml += '			<label class="commentContentLabel" for="commentContent">Content</label>';
 				boxHtml += '		</div>';
-				boxHtml += '		<div id="submitComment" class="ui button teal submit labeled icon">';
+				boxHtml += '		<div id="submitComment" data-id="0" class="ui button teal submit labeled icon">';
 				boxHtml += '			<i class="icon edit"></i> 提交评论';
 				boxHtml += '		</div>';
 				boxHtml += '	</div>';
@@ -332,21 +318,25 @@
 				}
 				
 				var item = '';
-				item += '<div id="comment'+param.id+'" class="comment">';
-				item += '	<a class="avatar">';
-				item += '		<img src="images/foot.png">';
-				item += '	</a>';
-				item += '	<div class="content '+topStyle+'">';
-				item += '		<a class="author"> '+param.name+' </a>';
-				item += '		<div class="metadata">';
-				item += '			<span class="date"> '+param.time+' </span>';
-				item += '		</div>';
-				item += '		<div class="text"> '+param.content+' </div>';
-				item += '		<div class="actions">';
-				item += '			<a class="reply" href="javascript:void(0)" selfID="'+param.id+'" >回复</a>';
-				item += '		</div>';
-				item += '	</div>';
-				item += '</div>';
+				if(para.tpl!= undefined){
+						item +=dataTemplate(para.tpl,param);
+					}else{
+						item += '<div id="comment'+param.id+'" class="comment">';
+						item += '	<a class="avatar">';
+						item += '		<img src="images/foot.png">';
+						item += '	</a>';
+						item += '	<div class="content '+topStyle+'">';
+						item += '		<a class="author"> '+param.userName+' </a>';
+						item += '		<div class="metadata">';
+						item += '			<span class="date"> '+param.time+' </span>';
+						item += '		</div>';
+						item += '		<div class="text"> '+param.content+' </div>';
+						item += '		<div class="actions">';
+						item += '			<a class="reply" href="javascript:void(0)" selfID="'+param.id+'" >回复</a>';
+						item += '		</div>';
+						item += '	</div>';
+						item += '</div>';
+					}
 				
 				if(parseInt(fCode)==0){  // 如果对根添加
 					$("#commentItems").append(item);
@@ -367,6 +357,30 @@
 			// 初始化上传控制层插件
 			this.init();
 		});
+//var dataTemplate =function (template,data){
+//  var outPrint="";  
+//  var matchs = template.match(/\{[a-zA-Z]+\}/gi); 
+//  var temp="";  
+//  for(var j = 0 ; j < matchs.length ;j++){  
+//      if(temp == "")  temp = template;  
+//      var re_match = matchs[j].replace(/[\{\}]/gi,"");  
+//      temp = temp.replace(matchs[j],data[re_match]);  
+//  }  
+//  outPrint += temp;  
+//  return outPrint;  
+//};
 	};
-})(jQuery);
+function dataTemplate(template,data){
+    var outPrint="";  
+    var matchs = template.match(/\{[a-zA-Z]+\}/gi); 
+    var temp="";  
+    for(var j = 0 ; j < matchs.length ;j++){  
+        if(temp == "")  temp = template;  
+        var re_match = matchs[j].replace(/[\{\}]/gi,"");  
+        temp = temp.replace(matchs[j],data[re_match]);  
+    }  
+    outPrint += temp;  
+    return outPrint;  
+};
 
+})(jQuery);

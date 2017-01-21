@@ -154,11 +154,11 @@
 	                        layer.alert(result.msg, {
 	                            icon: 6,
 	                            end: function() {
-//	                                if(result.redirect!=''){
-//	                                    window.location.href=result.redirect;
-//	                                }else{
-//	                                    window.location.reload();
-//	                                 }
+	                                if(result.redirect!=''){
+	                                    window.location.href=result.redirect;
+	                                }else{
+	                                    window.location.reload();
+	                                 }
 	                            }
 	                        }); 
 	                    }); 
@@ -195,7 +195,7 @@
 					});
 	    			break;
 	    		case '1':
-	    			$.post('__URL__/code',{id:data},function(result){
+	    			$.post('{:Url("gather/code")}',{id:data},function(result){
 	    				layer.open({
 						  type: 1,
 						  title: '新闻采集规则查询',
