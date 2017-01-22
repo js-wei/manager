@@ -1,15 +1,14 @@
 <div style="width:90%;margin:10px auto;">
-	<pre class="layui-code">
+	<code class="layui-code">
 		{$rule}
-	</pre>
+	</code>
 </div>
 <script type="text/javascript">
 	layui.use('code', function(){ //加载code模块
 	  layui.code({
 	  	'title':'{$title}',
 	  	'about':false,
-	  	'sink':'notepad',
-	  	 'height': '450px'
+	  	'height': '350px'
 	  });
 	});
 </script>

@@ -4,13 +4,13 @@ use QL\QueryList;
 use GuzzleHttp;
 class Index extends Base{
     public function index(){
-    	$list = db('gather')->where(['status'=>0])->select();
-		
-		foreach($list as $k=>$v){
-			$links=explode(',', $v['url']);
-			$rule=json_decode($v['rule'],true);
-			p($this->threading($links, $rule));
-		}
+//  	$list = db('gather')->where(['status'=>0])->select();
+//		
+//		foreach($list as $k=>$v){
+//			$links=explode(',', $v['url']);
+//			$rule=json_decode($v['rule'],true);
+//			p($this->threading($links, $rule));
+//		}
 	}
 	/**
 	 * 抓取数据

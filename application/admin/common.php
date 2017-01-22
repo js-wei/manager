@@ -28,56 +28,38 @@ function get_member_nickname($id=0){
 	}
 }
 
+//获取栏目类型
+function getPosition($type){
+	switch ($type) {
+		case 1:
+			$t='头部';
+			break;
+		case 2:
+			$t='中部';
+			break;
+		case 3:
+			$t='左侧';
+			break;
+		case 4:
+			$t='右侧';
+			break;
+		case 5:
+			$t='底部';
+			break;
+	}
+	return $t;
+}
 
 /**
-* Formats a JSON string for pretty printing
-*
-* @param string $json The JSON to make pretty
-* @param bool $html Insert nonbreaking spaces and <br />s for tabs and linebreaks
-* @return string The prettified output
-*/
-function _format_json($json, $html = false) {
-	 $tabcount = 0;
-	 $result = '';
-	 $inquote = false;
-	 $ignorenext = false;
-	 if ($html) {
-	  	$tab = "   ";
-	  	$newline = "<br/>";
-	 } else {
-	  	$tab = "\t";
-	  	$newline = "\n";
-	 }
-	 for($i = 0; $i < strlen($json); $i++) {
-		  $char = $json[$i];
-		  if($ignorenext) {
-		  	   $result .= $char;
-		  	   $ignorenext = false;
-		  }else {
-			  switch($char) {
-			   case '{':
-				   $tabcount++;
-				   $result .= $char . $newline . str_repeat($tab, $tabcount);
-				   break;
-			   case '}':
-				   $tabcount--;
-				   $result = trim($result) . $newline . str_repeat($tab, $tabcount) . $char;
-				   break;
-			   case ',':
-				   $result .= $char . $newline . str_repeat($tab, $tabcount);
-				   break;
-			   case '"':
-				   $inquote = !$inquote;
-				   $result .= $char;
-				   break;
-			   case '\\':
-				   if ($inquote) $ignorenext = true;
-				   $result .= $char;
-			   break;
-			   default:
-			   		$result .= $char;
-			  }
-		  }
-	 }
-	 return $result;
+ * [get_column 获取栏目名]
+ * @param  [type] $column_id [栏目ID]
+ * @return [type]            [description]
+ */
+function get_column($column_id=0){
+	if(!$column_id){
+		return "不限制";
+	}else{
+		$column = M('column')->field('id,title')->find($column_id);
+		return $column['title'];
+	}
 }

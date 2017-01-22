@@ -188,7 +188,7 @@ function split_content($content,$separator="，,。"){
 	$str=str_replace('，',' ',str_replace('。',' ',$str));
 	$result = explode(' ',$str);
 	$start_index =0; 
-	//return array_filter($result);
+
 	for ($i=0; $i < count($result)-1; $i++){ 
 
 		if($start_index%2==0){
@@ -284,19 +284,7 @@ function filter_mark($text){
 	$text=urldecode($text);
 	return trim($text);
 } 
-/**
- * [get_column 获取栏目名]
- * @param  [type] $column_id [栏目ID]
- * @return [type]            [description]
- */
-function get_column($column_id=0){
-	if(!$column_id){
-		return "不限制";
-	}else{
-		$column = M('column')->find($column_id);
-		return $column['title'];
-	}
-}
+
 /**
  * 去除空格
  * @param $str          字符串
@@ -336,19 +324,6 @@ function getMacAddr(){
  */
 function build_order_no(){
 	return date('Ymd').substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
-}
-
-
-
-function logger($res,$format=true){
-	$path ='./Data/'.date('Y-m-d',time());
-	if(!file_exists($path)){
-		//mkdir($path,0777,true);
-		mkdir($path);
-		chmod($path,0777);
-		//chmod
-	}
-	file_put_contents($path.'/'.date('Ymdhis',time()).".txt",$format?json_encode($res):$res);
 }
 
 
@@ -441,8 +416,6 @@ function day_or_night(){
 	}
 }
 
-
-
 function unicode_encode ($word){
 	$word0 = iconv('gbk', 'utf-8', $word);
 	$word1 = iconv('utf-8', 'gbk', $word0);
@@ -451,8 +424,7 @@ function unicode_encode ($word){
 	$word = preg_replace_callback('/\\\\u(\w{4})/', create_function('$hex', 'return \'&#\'.hexdec($hex[1]).\';\';'), substr($word, 1, strlen($word)-2));
 	return $word;
 }
-function unicode_decode ($uncode)
-{
+function unicode_decode ($uncode){
 	$word = json_decode(preg_replace_callback('/&#(\d{5});/', create_function('$dec', 'return \'\\u\'.dechex($dec[1]);'), '"'.$uncode.'"'));
 	return $word;
 }
@@ -578,41 +550,6 @@ function sub_str($str,$start=0,$length,$suffix=true,$charset="utf-8"){
 	} 
 }
 
-//获取栏目类型
-function getPosition($type){
-	switch ($type) {
-		case 1:
-			$t='头部';
-			break;
-		case 2:
-			$t='中部';
-			break;
-		case 3:
-			$t='左侧';
-			break;
-		case 4:
-			$t='右侧';
-			break;
-		case 5:
-			$t='底部';
-			break;
-	}
-	return $t;
-}
-/**
- * @author 魏巍
- * @date 2016/10/19
- * @description 获取栏目
- */
-function get_coloumn($id=0){
-	if($id==0){
-		$t = '全站';
-	}else{
-		$_t = M('column')->field('id,title')->find($id);
-		$t = $_t['title'];
-	}
-	return $t;
-}
 
 /**
  * [paichu 去掉指定的字符串]
@@ -656,7 +593,6 @@ function heigLine($key,$content){
 	return preg_replace('/'.$key.'/i', '<font color="red"><b>'.$key.'</b></font>', $content);
 }
 
-
 function reg($str){		 
 	return  _strip_tags(array("p", "br"),$str); 
 }
@@ -676,9 +612,9 @@ function _strip_tags($tagsArr,$str) {
 }  
 /**
  * [tag 截取字符串]
- * @param  [type] $资源字符串
- * @param  [type] $开始位置
- * @param  [type] $截取长度
+ * @param  [type] 资源字符串
+ * @param  [type] 开始位置
+ * @param  [type] 截取长度
  * @return [type] 结果字符串
  */
 function tagstr($str,$start=0,$length=250){	
@@ -688,34 +624,7 @@ function tagstr($str,$start=0,$length=250){
 	return $temp;
 }
 
-function http($url, $postfields='', $method='GET', $headers=array()){
-       
-        $ci=curl_init();
-        curl_setopt($ci, CURLOPT_SSL_VERIFYPEER, FALSE); 
-        curl_setopt($ci, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ci, CURLOPT_CONNECTTIMEOUT, 30);
-        curl_setopt($ci, CURLOPT_TIMEOUT, 30);
-        if($method=='POST'){
-            curl_setopt($ci, CURLOPT_POST, TRUE);
-            if($postfields!='')curl_setopt($ci, CURLOPT_POSTFIELDS, $postfields);
-        }
-        $headers=!empty($headers)?$headers:["User-Agent: renrenPHP(piscdong.com)"];
-		
-        curl_setopt($ci, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ci, CURLOPT_URL, $url);
-        $response=curl_exec($ci);
-        curl_close($ci);
-		
-        $json_r=array();
-        // 对页面内容进行编码
-     	$response=mb_convert_encoding($response, 'UTF-8', 'UTF-8,GBK,GB2312,BIG5'); 
-		
-		if(preg_match('/<!DOCTYPE html>/', $response,$matches)){  
-	       return $response;
-	    }else{
-	    	return json_decode($response, true);
-	    }
-    }
+
 /**  
  * * 系统邮件发送函数  
  * @param string $to    接收邮件者邮箱  
@@ -745,7 +654,7 @@ function think_send_mail($to, $name, $subject = '', $body = '', $attachment = nu
 	$mail->AddReplyTo($replyEmail, $replyName);     
 	$mail->Subject    = $subject;     
 	$mail->MsgHTML($body);  
-	//$mail->isHTML(true);   
+	$mail->isHTML(true);   
 	$mail->AddAddress($to, $name);  
 	//p($mail);die;   
 	if(is_array($attachment)){ // 添加附件         
@@ -763,7 +672,6 @@ function SplitWord($str){
 	vendor('SplitWord/SplitWord'); 
 	$split=new SplitWord();
 	$data=$split->SplitRMM($str);
-	p($data);
 	$split->Clear();
 	return $data;
 }
@@ -911,41 +819,55 @@ function getKey($arr,$value) {
 		}
 	}
 }
-
 /**
- * [php2class 转换成Think默认命名规则类]
- * e.g:
- * 修改文件夹下所有的php文件:.php --> .class.php
- * php2class(__FILE__,'Action\MemberAction.class.php','Tool');
- * @param [type] $path     		[文件夹路劲]
- * @param [type] $reg_path 		[要替换文件夹]
- * @param [type] $sea_path 		[待替换文件夹]
- * @param  boolean $print    	[是否输出]
- * @return [type]            	[description]
- */
-function php2class($path,$reg_path,$sea_path,$print=false){
-	$hostdir=!empty($path)?$path:__FILE__;
-
-	if(!empty($reg_path) && !empty($sea_path)){
-		 $hostdir=str_replace($reg_path,$sea_path,$hostdir);
-	} 
-
-	$filesnames = scandir($hostdir);
-	foreach ($filesnames as $k => $v) {
-		if($k>1){ //修改类名
-			if(strpos($v,'class')===false){
-				$temp=explode('.', $v);
-				$n=$hostdir.'\\'.$temp[0].'.class.php';
-				$o=$hostdir.'\\'.$v;
-				rename($o,$n);
-				if($print){
-					p($n);
-				}
-			}else{
-				if($print){
-					p($v);
-				}
-			}
-		}
-	 }     
+* Formats a JSON string for pretty printing
+*
+* @param string $json The JSON to make pretty
+* @param bool $html Insert nonbreaking spaces and <br />s for tabs and linebreaks
+* @return string The prettified output
+*/
+function _format_json($json, $html = false) {
+	$tabcount = 0;
+	$result = '';
+	$inquote = false;
+	$ignorenext = false;
+	if ($html) {
+	  	$tab = "   ";
+	  	$newline = "<br/>";
+	} else {
+	  	$tab = "\t";
+	  	$newline = "\n";
+	}
+	for($i = 0; $i < strlen($json); $i++) {
+		  $char = $json[$i];
+		  if($ignorenext) {
+		  	   $result .= $char;
+		  	   $ignorenext = false;
+		  }else {
+			  switch($char) {
+			   case '{':
+				   $tabcount++;
+				   $result .= $char . $newline . str_repeat($tab, $tabcount);
+				   break;
+			   case '}':
+				   $tabcount--;
+				   $result = trim($result) . $newline . str_repeat($tab, $tabcount) . $char;
+				   break;
+			   case ',':
+				   $result .= $char . $newline . str_repeat($tab, $tabcount);
+				   break;
+			   case '"':
+				   $inquote = !$inquote;
+				   $result .= $char;
+				   break;
+			   case '\\':
+				   if ($inquote) $ignorenext = true;
+				   $result .= $char;
+			   break;
+			   default:
+			   		$result .= $char;
+			  }
+		  }
+	}
+	return $result;
 }

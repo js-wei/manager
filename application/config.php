@@ -13,7 +13,7 @@ return [
     // 默认模块名
     'default_module'        => 'index',
     // 默认控制器名
-    'default_controller'    => 'Index',
+    'default_controller'    => 'index',
     // 默认操作名
     'default_action'        => 'index',
     'captcha'  => [
@@ -62,11 +62,11 @@ return [
     ],
     'UPLOADE_FILE'=>[
         'size'=>1024*1024*8,        //8M最大
-        'ext'=>'txt,zip,tar,xls,pdf,doc,docx'
+        'ext'=>'txt,zip,tar,xls,pdf,doc,docx,rar,xlsx'
     ],
     'UPLOADE_KINDEDITOR'=>[
         'size'=>1024*1024*8,        //8M最大
-        'ext'=>'jpg,png,gif,txt,zip,tar,xls,pdf,doc,docx'
+        'ext'=>'jpg,png,gif,txt,zip,rar,tar,xls,pdf,doc,docx,xlsx'
     ],
     'ENCRYPT_KEY'=>'THINK',         //加密key
     'LOG_PATH'=>'/log',
