@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>评论</title>
+<link rel="stylesheet" href="css/semantic.css" type="text/css" />
+<link rel="stylesheet" href="css/zyComment.css" type="text/css" />
+<style type="text/css" media="print,screen">  
+	label{font-weight: bold;}
+	a{font-family:Microsoft YaHei;}
+	/*#articleComment{width:600px;height:1500px;overflow:auto;}*/
+</style> 
+</head>
+<body>
+<div id="articleComment"></div>
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="js/comment.js"></script>
+<script type="text/javascript">
+	var agoComment = [
+		{"id":1,"username":"游客1","time":"2014-04-04","sortID":0,"content":"第一条评论"},
+		{"id":2,"username":"游客2","time":"2014-04-04","sortID":0,"content":"第二条评论"},
+		{"id":3,"username":"站长","time":"2014-04-04","sortID":1,"content":"第一条评论的回复"},
+		{"id":4,"username":"站长","time":"2014-04-04","sortID":2,"content":"第二条评论的回复"},
+		{"id":5,"username":"游客3","time":"2014-04-04","sortID":0,"content":"第三条评论"},
+		{"id":6,"username":"游客2","time":"2014-04-04","sortID":4,"content":"第二条评论的回复的回复"},
+	];
+	$("#articleComment").comment({
+		'reply':false,
+		"agoComment":agoComment,
+		//"tpl":'<div id="comment{id}"class="comment"><img src="{head}" alt="{userName}" class="comment-avatar"><div class="comment-body content"><div class="comment-text "><div class="comment-header"><a href="#" title="">{userName}</a><span>{time}</span></div>{content}</div><div class="comment-footer"> <a href="#"><i class="fa fa-thumbs-o-up"></i>({love})</a><a href="#"><i class="fa fa-thumbs-o-down"></i>({seem})</a><div class="actions"><a class="reply" href="javascript:void(0)" selfID="{id}">回复</a></div></div></div></div>',
+		"callback":function(comment){
+			$("#articleComment").comment("setCommentAfter",{
+				"id":123, 
+				"username":comment.username, 
+				"content":comment.content, 
+				"time":$.getTime(comment.time,'yyyy-MM-dd')
+			});
+		}
+	});
+</script>
+</body>
+</html>

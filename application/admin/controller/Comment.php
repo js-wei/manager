@@ -35,7 +35,6 @@ class Comment extends Base{
 	}
 	
 	public function all($id=0,$uid=0){
-		
 		if(!$uid||!$id){
 			//return ['status'=>0,'msg'=>'修改失败请重试'];
 		}
@@ -43,19 +42,19 @@ class Comment extends Base{
 		$list = db('comments')->field('dates',true)->where(['aid'=>$vo['aid']])->select();
 		
 		if(empty($list)){
-			//return ['status'=>0,'msg'=>'没有更多的数据'];
+			return ['status'=>0,'msg'=>'没有更多的数据'];
 		}
 		foreach($list as $k=>$v){
 			$m = Comments::get($v['id']);
-			$list[$k]['user_nickname'] = get_member_nickname($v['uid']);
-			$list[$k]['user_head'] = $m->infor['head']?$m->infor['head']:'/static/admin/img/avatars/head.jpg';
-			$list[$k]['art_title'] = $m->article['title'];
+			$list[$k]['nickname'] = get_member_nickname($v['uid']);
+			$list[$k]['head'] = $m->infor['head']?$m->infor['head']:'/static/admin/img/avatars/head.jpg';
+			$list[$k]['title'] = $m->article['title'];
+			$list[$k]['sortID'] = $v['cid'];
+			$list[$k]['date'] = date('Y-m-d',$v['date']);
 			unset($list['aid']);
 			unset($list['uid']);
 		}
-		
-		$list = \service\Category::unlimitedForLevel1($list);
-		$this->assign('list',$list);
+		$this->assign('list',json_encode($list));
 		return view();
 	}
 	/**

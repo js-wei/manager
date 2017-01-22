@@ -1,0 +1,112 @@
+<link href="__CSS__/font-awesome.min.css" rel="stylesheet" />
+<link id="beyond-link" href="__CSS__/beyond.min.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+	.comments{width:95%;margin:10px auto;}
+</style>
+<div class="comments">
+	<volist name="list" id="comm">
+		<empty name="comm.child">
+			<div class="comment">
+		        <img src="{$comm.user_head}" alt="" class="comment-avatar">
+		        <div class="comment-body">
+		            <div class="comment-text">
+		                <div class="comment-header">
+		                    <a href="#" title="">{$comm.user_nickname}</a><span>{$comm.date|date="Y-m-d H:i:s",###}</span>
+		                </div>
+		                {$comm.content}
+		            </div>
+		            <div class="comment-footer">
+		                <a href="#"><i class="fa fa-thumbs-o-up"></i>({$comm.love})</a>
+		                <a href="#"><i class="fa fa-thumbs-o-down"></i>({$comm.seem})</a>
+		            </div>
+		        </div>
+		    </div>
+		    <else />
+		    <div class="comment">
+		        <img src="{$comm.user_head}" alt="" class="comment-avatar">
+		        <div class="comment-body">
+		            <div class="comment-text">
+		                <div class="comment-header">
+		                    <a href="#" title="">{$comm.user_nickname}</a><span>{$comm.date|date="Y-m-d H:i:s",###}</span>
+		                </div>
+		                {$comm.content}
+		            </div>
+		            <div class="comment-footer">
+		                <a href="#"><i class="fa fa-thumbs-o-up"></i>({$comm.love})</a>
+		                <a href="#"><i class="fa fa-thumbs-o-down"></i>({$comm.seem})</a>
+		            </div>
+		        </div>
+		        <volist name="comm.child" id="comm1">
+			    	<empty name="comm1.child">
+			    		<div class="comment">
+					        <img src="{$comm1.user_head}" alt="" class="comment-avatar">
+					        <div class="comment-body">
+					            <div class="comment-text">
+					                <div class="comment-header">
+					                    <a href="#" title="">{$comm1.user_nickname}</a><span>{$comm.date|date="Y-m-d H:i:s",###}</span>
+					                </div>
+					                {$comm1.content}
+					            </div>
+					            <div class="comment-footer">
+					                <a href="#"><i class="fa fa-thumbs-o-up"></i>({$comm1.love})</a>
+					                <a href="#"><i class="fa fa-thumbs-o-down"></i>({$comm1.seem})</a>
+					            </div>
+					        </div>
+					    </div>
+					    <else />
+					    <empty name="comm1.child">
+					    	<div class="comment">
+						        <img src="{$comm1.user_head}" alt="" class="comment-avatar">
+						        <div class="comment-body">
+						            <div class="comment-text">
+						                <div class="comment-header">
+						                    <a href="#" title="">{$comm1.user_nickname}</a><span>{$comm.date|date="Y-m-d H:i:s",###}</span>
+						                </div>
+						                {$comm1.content}
+						            </div>
+						            <div class="comment-footer">
+						                <a href="#"><i class="fa fa-thumbs-o-up"></i>({$comm1.love})</a>
+						                <a href="#"><i class="fa fa-thumbs-o-down"></i>({$comm1.seem})</a>
+						            </div>
+						        </div>
+						    </div>
+						    <else />
+						    <div class="comment">
+						        <img src="{$comm1.user_head}" alt="" class="comment-avatar">
+						        <div class="comment-body">
+						            <div class="comment-text">
+						                <div class="comment-header">
+						                    <a href="#" title="">{$comm1.user_nickname}</a><span>{$comm.date|date="Y-m-d H:i:s",###}</span>
+						                </div>
+						                {$comm1.content}
+						            </div>
+						            <div class="comment-footer">
+						                <a href="#"><i class="fa fa-thumbs-o-up"></i>({$comm1.love})</a>
+						                <a href="#"><i class="fa fa-thumbs-o-down"></i>({$comm1.seem})</a>
+						            </div>
+						        </div>
+						        <volist name="comm1.child" id="comm2">
+							    	<div class="comment">
+								        <img src="{$comm2.user_head}" alt="" class="comment-avatar">
+								        <div class="comment-body">
+								            <div class="comment-text">
+								                <div class="comment-header">
+								                    <a href="#" title="">{$comm2.user_nickname}</a><span>{$comm2.date|date="Y-m-d H:i:s",###}</span>
+								                </div>
+								                {$comm2.content}
+								            </div>
+								            <div class="comment-footer">
+								                <a href="#"><i class="fa fa-thumbs-o-up"></i>({$comm2.love})</a>
+								                <a href="#"><i class="fa fa-thumbs-o-down"></i>({$comm2.seem})</a>
+								            </div>
+								        </div>
+								    </div>
+							    </volist>
+						    </div>
+					    </empty>
+			    	</empty>
+			    </volist>
+		    </div>
+		</empty>
+	</volist>
+</div>
