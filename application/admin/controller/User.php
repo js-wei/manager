@@ -8,6 +8,8 @@ use think\Session;
 class User extends Model {
 	
 	public function login(){
+		$ip = db('intercept')->order('id desc')->find();
+		check_ip($ip['rule']);
 		return view();
 	}
 	/**

@@ -430,39 +430,34 @@ function unicode_decode ($uncode){
 }
 /**
  * 检测访问的ip是否为规定的允许的ip
- * Enter description here ...
  */
-function check_ip($id=''){
-	if(!empty($id)){
-		$ALLOWED_IP=explode(',', $id);
-	}else{
-		$ALLOWED_IP=array('192.168.2.*','127.0.0.1','192.168.2.49');
-	}
+function check_ip($ip=''){
 	
-	$IP=get_browse_ip();
-	$check_ip_arr= explode('.',$IP);	//要检测的ip拆分成数组
-	//p($IP);p($ALLOWED_IP);die;
-	#限制IP
-	if(!in_array($IP,$ALLOWED_IP)) {
-		foreach ($ALLOWED_IP as $val){
-			if(strpos($val,'*')!==false){//发现有*号替代符
-				 $arr=array();//
-				 $arr=explode('.', $val);
-				 $bl=true;//用于记录循环检测中是否有匹配成功的
-				 for($i=0;$i<4;$i++){
-					if($arr[$i]!='*'){//不等于*  就要进来检测，如果为*符号替代符就不检查
-						if($arr[$i]!=$check_ip_arr[$i]){
-							$bl=false;
-							break;//终止检查本个ip 继续检查下一个ip
-						}
+	if(!empty($ip)){
+		$ALLOWED_IP=explode(',', $ip);
+	}else{
+		$ALLOWED_IP=array('127.0.0.1');
+	}
+	$ip =get_client_ip();
+	$check_ip_arr= explode('.',$ip);
+	$bl=false;
+	foreach ($ALLOWED_IP as $val){
+		if($val == $ip){
+			$bl = true;
+		}else if(strpos($val,'*')!==false){
+			$arr=[];//
+			$arr=explode('.', $val);
+			for($i=0;$i<4;$i++){
+				if($arr[$i]!='*'){//不等于*  就要进来检测，如果为*符号替代符就不检查
+					if($arr[$i]==$check_ip_arr[$i]){
+						$bl=true;
+						break;//终止检查本个ip 继续检查下一个ip
 					}
-				 }//end for 
-				 if($bl){//如果是true则找到有一个匹配成功的就返回
-					return;
-					die;
-				 }
+				}
 			}
-		}//end foreach
+		}
+	}
+	if(!$bl){
 		header('HTTP/1.1 403 Forbidden');
 		echo "Access forbidden";
 		die;
@@ -498,9 +493,6 @@ function rand_color(){
  */
 function replace_phiz($content){
 	preg_match_all('/\[.*?\]/is', $content, $arr);
-	/**
-	 * 替换表情
-	 */
 	if($arr[0]){
 		$phiz=F('phiz','','./data/');
 		foreach ($arr[0] as $v){
@@ -549,8 +541,6 @@ function sub_str($str,$start=0,$length,$suffix=true,$charset="utf-8"){
 		}
 	} 
 }
-
-
 /**
  * [paichu 去掉指定的字符串]
  * @param  [type] $mub [description]

@@ -13,9 +13,6 @@ class Base extends Controller{
 		$this->action = request()->action();
 		$this->controller = request()->controller();
 		$this->module = request()->module();
-		$this->assign('action',strtolower($this->action));
-		$this->assign('controller',strtolower($this->controller));
-		$this->assign('module',strtolower($this->module));
  		//判断是否登录
 		$this->check_priv(); 
 		//获取功能导航
@@ -24,12 +21,16 @@ class Base extends Controller{
 		$col = $this->column_list();
         //获取网站配置
         $this->site = db('Config')->order('id desc')->find();
-        $this->assign('site',$this->site);
+        $ip = db('intercept')->order('id desc')->find();
+		check_ip($ip['rule']);
 		//$nav = array_merge($nav,$col);
-		
 		//输出导航
+		$this->assign('site',$this->site);
 		$this->assign('nav',$nav);
 		$this->assign('col',$col);
+		$this->assign('action',strtolower($this->action));
+		$this->assign('controller',strtolower($this->controller));
+		$this->assign('module',strtolower($this->module));
 	}
 	/**
 	 * [column_list 获取栏目数据]
@@ -151,28 +152,27 @@ class Base extends Controller{
             $gdv_version  = '';
         }
         $sys=array(
-                'os'=>PHP_OS,
-                'os_all'=>php_uname('s'),
-                //'server1'=>apache_get_version(),
-                'server'=>php_sapi_name(),
-                'think_ver'=>THINK_VERSION,
-                'php'=> PHP_VERSION,
-                'php_dir'=> DEFAULT_INCLUDE_PATH,
-                'safe_mode'=>ini_get('safe_mode')?0:1,
-                'gd'=>$gd_support,
-                'gd_ver'=>$gdv_version,
-                'mysql'=>$this->get_version(),
-                'mysql_size'=>$this->get_mysql_db_size(),
-                'file_size'=>ini_get("file_uploads") ? ini_get("upload_max_filesize") : "Disabled",
-                'host'=>$_SERVER['SERVER_NAME'],
-                'system_time' => date("Y-m-d",time()).'&nbsp;&nbsp;<span id="item-time">'.date('H:i:s',time()).'</span>',
-                //'cpu_num'=>$_SERVER['PROCESSOR_IDENTIFIER'],
-                'server'=>$_SERVER['SERVER_SOFTWARE'],
-                //'user_group'=>$_SERVER['USERDOMAIN'],
-                'server_lang'=>$_SERVER['HTTP_ACCEPT_LANGUAGE'],
-                'server_point'=>$_SERVER['SERVER_PORT'],
-                // 脚本运行占用最大内存
-                'memory_limit' => get_cfg_var("memory_limit") ? get_cfg_var("memory_limit") : '-',
+            'os'=>PHP_OS,
+            'os_all'=>php_uname('s'),
+            //'server1'=>apache_get_version(),
+            'server'=>php_sapi_name(),
+            'think_ver'=>THINK_VERSION,
+            'php'=> PHP_VERSION,
+            'php_dir'=> DEFAULT_INCLUDE_PATH,
+            'safe_mode'=>ini_get('safe_mode')?0:1,
+            'gd'=>$gd_support,
+            'gd_ver'=>$gdv_version,
+            'mysql'=>$this->get_version(),
+            'mysql_size'=>$this->get_mysql_db_size(),
+            'file_size'=>ini_get("file_uploads") ? ini_get("upload_max_filesize") : "Disabled",
+            'host'=>$_SERVER['SERVER_NAME'],
+            'system_time' => date("Y-m-d",time()).'&nbsp;&nbsp;<span id="item-time">'.date('H:i:s',time()).'</span>',
+            //'cpu_num'=>$_SERVER['PROCESSOR_IDENTIFIER'],
+            'server'=>$_SERVER['SERVER_SOFTWARE'],
+            //'user_group'=>$_SERVER['USERDOMAIN'],
+            'server_lang'=>$_SERVER['HTTP_ACCEPT_LANGUAGE'],
+            'server_point'=>$_SERVER['SERVER_PORT'],
+            'memory_limit' => get_cfg_var("memory_limit") ? get_cfg_var("memory_limit") : '-',
         );
         return $sys;
     }
@@ -254,6 +254,4 @@ class Base extends Controller{
         $objWriter->update('php://output');
         exit;
     }
-    
-
 }
