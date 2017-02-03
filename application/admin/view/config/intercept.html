@@ -12,23 +12,27 @@
                         <textarea name="rule" class="form-control" rows="7" placeholder="拦截IP"><notempty name="info">{$info.rule}</notempty></textarea>
 						<input type="hidden" name="id" value="<notempty name='info'>{$info.id}</notempty>">
                     	<div class="text-danger">
-                    		*填写您要放行的IP,可以填写完整的IP,也可以使用"*"代表拦截段
+                    		<ul>
+                    			<li>*填写您要放行的IP,可以填写完整的IP,也可以使用"*"代表拦截段,多个使用','隔开</li>
+                    			<li>*不填表示放行全部IP</li>
+                    			<li>*填写'0.0.0.0'或'*.*.*.*'表示放行全部IP</li>
+                    		</ul>
                     	</div>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-1 control-label">栏目状态</label>
+                    <label class="col-lg-1 control-label">状态</label>
                     <div class="col-lg-6">
                         <div class="radio pull-left">
                             <label>
                                 <input name="status" type="radio" value="0" class="colored-success" <notempty name="info"><eq name="info.status" value="0">checked="checked"</eq><else />checked="checked"</notempty>>
-                                <span class="text">是</span>
+                                <span class="text">启用</span>
                             </label>
                         </div>
                         <div class="radio pull-left">
                             <label>
                                 <input name="status" type="radio" value="1" class="colored-danger" <notempty name="info"><eq name="info.status" value="1">checked="checked"</eq></notempty>>
-                                <span class="text">否</span>
+                                <span class="text">禁用</span>
                             </label>
                         </div>
                         <div class="radio hide">
@@ -76,15 +80,6 @@
                         layer.alert(data.msg,{icon:5});
                     }
                 });
-            },
-            fields: {
-                rule: {
-                    validators: {
-                        notEmpty: {
-                            message: '请输入拦截IP'
-                        }
-                    }
-                },
             }
         })
         .find('button[data-toggle]')

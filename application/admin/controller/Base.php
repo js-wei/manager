@@ -21,8 +21,10 @@ class Base extends Controller{
 		$col = $this->column_list();
         //获取网站配置
         $this->site = db('Config')->order('id desc')->find();
-        $ip = db('intercept')->order('id desc')->find();
-		check_ip($ip['rule']);
+        $ip = db('intercept')->field('rule,status')->order('id desc')->find();
+		if(!$ip['status']){
+			check_ip($ip['rule']);
+		}
 		//$nav = array_merge($nav,$col);
 		//输出导航
 		$this->assign('site',$this->site);

@@ -4,42 +4,68 @@ use QL\QueryList;
 use GuzzleHttp;
 class Index extends Base{
     public function index(){
-//  	$list = db('gather')->where(['status'=>0])->select();
-//		
-//		foreach($list as $k=>$v){
-//			$links=explode(',', $v['url']);
-//			$rule=json_decode($v['rule'],true);
-//			p($this->threading($links, $rule));
-//		}
+    	
 	}
 	/**
 	 * 抓取数据
 	 * @author 魏巍
 	 */
 	public function pull(){
-		$list = db('gather')->field('dates',true)->where(['id'=>['lt',2],'status'=>0])->select();
-		foreach($list as $k => $v){
-			$arr = json_decode($v['rule'],true);
-			$result = $this->get_news_list($v['url'],$arr['list']);
-			foreach($result as $k1 => $v1){
-				$article = db('article')->where(['title'=>$v1['title']])->count();
-				if(!$article){
-					if(!array_key_exists('tit',$v1)){
-						$v1['tit']=$v['tit'];
-						$v1['time']='';
-					}
-					if(count($v1)>2 && !empty($v1['time'])){
-						$v1['time'] =date('Y')."-".$v1['time'];
-					}
-					ksort($v1);
-					$_result[$k1] = $this->_get_content($v1['tit'],$v1['href'],$arr['content'],$v1['time']);
-				}
-			}
+		$starttime = explode(' ',microtime());
+		$list = db('gather')->where(['id'=>5])->select();
+		foreach($list as $k=>$v){
+			$links=explode(',', $v['url']);
+			$rule=json_decode($v['rule'],true);
+			$this->threading($links, $rule);
+			$data = [];
+			$count = 0;
+//			foreach($_SESSION['think'] as $k=>$v){
+//				if(strstr($k,"gather")){
+//					$article = db('article')->where(['title'=>$v['title']])->count('*');
+//					$column = db('column')->field('id,title,keywords,description')->where($v['map'])->find();
+//					unset($v['map']);
+//					if(!$article && !empty($column)){
+//						$v['column_id']=$column['id'];
+//						$v['keywords']=$v['title']."-".$column['keywords'];
+//						$v['description']=$v['title']."-".$column['description'];
+//						$data[]=$v;
+//					}
+//					session($k,null);
+//				}
+//			}
+//			
+//			
+//			$id = db('article')->insertAll($data);
+//			//程序运行时间
+//			$endtime = explode(' ',microtime());
+//			$thistime = $endtime[0]+$endtime[1]-($starttime[0]+$starttime[1]);
+//			$thistime = round($thistime,2);
+//			echo "本网页执行耗时：".$thistime." 秒。<br/>";
 		}
-		$_result = array_filter($_result);
-		if(!empty($_result)){
-			 db('article')->insertAll($_result);
-		}
+
+//		$list = db('gather')->field('dates',true)->where(['id'=>['lt',2],'status'=>0])->select();
+//		foreach($list as $k => $v){
+//			$arr = json_decode($v['rule'],true);
+//			$result = $this->get_news_list($v['url'],$arr['list']);
+//			foreach($result as $k1 => $v1){
+//				$article = db('article')->where(['title'=>$v1['title']])->count();
+//				if(!$article){
+//					if(!array_key_exists('tit',$v1)){
+//						$v1['tit']=$v['tit'];
+//						$v1['time']='';
+//					}
+//					if(count($v1)>2 && !empty($v1['time'])){
+//						$v1['time'] =date('Y')."-".$v1['time'];
+//					}
+//					ksort($v1);
+//					$_result[$k1] = $this->_get_content($v1['tit'],$v1['href'],$arr['content'],$v1['time']);
+//				}
+//			}
+//		}
+//		$_result = array_filter($_result);
+//		if(!empty($_result)){
+//			 db('article')->insertAll($_result);
+//		}
 	}
 
 	/**
@@ -112,7 +138,7 @@ class Index extends Base{
 	                    CURLOPT_AUTOREFERER => true,
 			        ],
 			        //设置线程数
-			        'maxThread' => 200,
+			        'maxThread' => 100,
 			        //设置最大尝试数
 			        'maxTry' => 5 
 			    ],
@@ -127,38 +153,37 @@ class Index extends Base{
 			        $ql = QueryList::Query($a['content'],$list)->getData(function($item) use($content){
 			        	$item1= $this->get_article($item['href'],$content)[0];
 						
-						$map=[];
-			        	if(key_exists('tit', $item)){
-							$str = preg_replace('/[\[\]\{\}]/','',$item['tit']);
-							$map['title']=$str;
-						}else{
-							$map['title']=$item1['tit'];
-						}
-						if(!strstr($map['title'],'图')){
-							if(key_exists('tit', $item)){
+						if(count($item1)>0 || $item1!=null){
+							$map=[];
+				        	if(key_exists('tit', $item)){
 								$str = preg_replace('/[\[\]\{\}]/','',$item['tit']);
 								$map['title']=$str;
 							}else{
-								$map['title']=$item1['tit'];unset($item1['tit']);
+								$map['title']=$item1['tit'];
 							}
-							$article = db('article')->where(['title'=>$item1['title']])->count('*');
-							$column = db('column')->field('id,title,keywords,description')->where($map)->find();
 							
-							if(!$article && !empty($item1)){
+							if(!strstr($map['title'],'图')){
+								if(key_exists('tit', $item)){
+									$str = preg_replace('/[\[\]\{\}]/','',$item['tit']);
+									$map['title']=$str;
+								}else{
+									$map['title']=$item1['tit'];unset($item1['tit']);
+								}
+								
 								if(key_exists('date', $item1)){
 									$item1['date'] = strtotime1($item1['date']);
 								}else{
 									$item1['date'] = strtotime1($item1['date1']);unset($item1['date1']);
 								}
-								$item1['content']=htmlspecialchars($item1['content']);		
-								$item1['column_id']=$column['id'];
-								$item1['keywords']=$item1['title']."_".$column['keywords'];
-								$item1['description']=$item1['title']."_".$column['description'];
-								$id = db('article')->insert($item1);
-								return $id;
+								//$item1['content']=htmlspecialchars($item1['content']);
+								//$item1['map']=$map;
 							}
 						}
+						p($item1);die;
+						//session("gather_".time(),$item1);
 			       });
+				   
+				   return $ql;
 			    },
 			    'error'=>function(){
 			    	echo "执行出错了";

@@ -19,6 +19,9 @@ class Config extends Base{
 		$this->assign('info',$list);
 		return $this->fetch();
 	}
+	/**
+	 * 
+	 */
 	public function intercept(){
 		$model = [
 			'name'=>'放行IP设置'
@@ -32,6 +35,9 @@ class Config extends Base{
 		$this->assign('info',$list);
 		return view();
 	}
+	/**
+	 * 
+	 */
 	public function add($id=0){
 		$model = [
 			'name'=>'网站设置'

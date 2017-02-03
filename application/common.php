@@ -60,6 +60,12 @@ function strtotime1($str){
 		}else if(strstr($str,'分钟前')){
 			$d = strtotime('-'.$result.' minute');
 			$str = date('Y-m-d H:i:s',$d);
+		}else if(strstr($str,'昨天')){
+			$d = strtotime('-2 day');
+			$str = date('Y-m-d H:i:s',$d);
+		}else if(strstr($str,'前天')){
+			$d = strtotime('-2 day');
+			$str = date('Y-m-d H:i:s',$d);
 		}else if(strstr($str,'天前')){
 			$d = strtotime('-'.$result.' day');
 			$str = date('Y-m-d H:i:s',$d);
@@ -69,6 +75,8 @@ function strtotime1($str){
 		}else if(strstr($str,'年前')){
 			$d = strtotime('-'.$result.' year');
 			$str = date('Y-m-d H:i:s',$d);
+		}else if(strstr($str,'-')){
+			$str = date('Y',time())."-".$str;
 		}else{
 			$str = preg_replace('/([{年}{月}{日}])/u','/',$str);
 		}
@@ -432,29 +440,33 @@ function unicode_decode ($uncode){
  * 检测访问的ip是否为规定的允许的ip
  */
 function check_ip($ip=''){
-	
-	if(!empty($ip)){
-		$ALLOWED_IP=explode(',', $ip);
-	}else{
-		$ALLOWED_IP=array('127.0.0.1');
-	}
+	$ip = $ip?$ip:'0.0.0.0,*.*.*.*,127.0.0.1';
+	$allow_ip=explode(',', $ip);
 	$ip =get_client_ip();
 	$check_ip_arr= explode('.',$ip);
+	
 	$bl=false;
-	foreach ($ALLOWED_IP as $val){
-		if($val == $ip){
+	foreach ($allow_ip as $val){
+		if(($val == $ip) || ($val=='0.0.0.0') || ($val=='*.*.*.*')){
 			$bl = true;
 		}else if(strpos($val,'*')!==false){
 			$arr=[];//
 			$arr=explode('.', $val);
+			$j=0;
 			for($i=0;$i<4;$i++){
 				if($arr[$i]!='*'){//不等于*  就要进来检测，如果为*符号替代符就不检查
 					if($arr[$i]==$check_ip_arr[$i]){
 						$bl=true;
 						break;//终止检查本个ip 继续检查下一个ip
 					}
+				}else{
+					$j++;
 				}
 			}
+//			if($j){
+//				$bl=true;
+//				break;
+//			}
 		}
 	}
 	if(!$bl){
