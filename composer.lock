@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "efa0f3f8b3345b81e77e379339245556",
+    "content-hash": "0df1f1d55b15580be9be0be81a34baf7",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -363,6 +363,43 @@
             ],
             "description": "QueryList扩展，AQuery扩展基类",
             "time": "2016-01-06T07:51:20+00:00"
+        },
+        {
+            "name": "jaeger/querylist-ext-dimage",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jae-jae/QueryList-Ext-DImage.git",
+                "reference": "620fa53e7c255860793d7897de7a5b7c7b8d674f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jae-jae/QueryList-Ext-DImage/zipball/620fa53e7c255860793d7897de7a5b7c7b8d674f",
+                "reference": "620fa53e7c255860793d7897de7a5b7c7b8d674f",
+                "shasum": ""
+            },
+            "require": {
+                "jaeger/http": "^1.0",
+                "jaeger/querylist-ext-aquery": "^1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "QL\\Ext\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jaeger",
+                    "email": "hj.q@qq.com"
+                }
+            ],
+            "description": "QueryList扩展，DImage图片下载扩展",
+            "time": "2016-07-08T16:45:39+00:00"
         },
         {
             "name": "jaeger/querylist-ext-multi",

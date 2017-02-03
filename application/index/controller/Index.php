@@ -2,9 +2,10 @@
 namespace app\index\controller;
 use QL\QueryList;
 use GuzzleHttp;
+
 class Index extends Base{
     public function index(){
-    	
+    	p(config('UPLOADE.path'));
 	}
 	/**
 	 * 抓取数据
@@ -12,35 +13,35 @@ class Index extends Base{
 	 */
 	public function pull(){
 		$starttime = explode(' ',microtime());
-		$list = db('gather')->where(['id'=>5])->select();
+		$list = db('gather')->where(['id'=>1])->select();
+		
 		foreach($list as $k=>$v){
 			$links=explode(',', $v['url']);
 			$rule=json_decode($v['rule'],true);
 			$this->threading($links, $rule);
 			$data = [];
-			$count = 0;
-//			foreach($_SESSION['think'] as $k=>$v){
-//				if(strstr($k,"gather")){
-//					$article = db('article')->where(['title'=>$v['title']])->count('*');
-//					$column = db('column')->field('id,title,keywords,description')->where($v['map'])->find();
-//					unset($v['map']);
-//					if(!$article && !empty($column)){
-//						$v['column_id']=$column['id'];
-//						$v['keywords']=$v['title']."-".$column['keywords'];
-//						$v['description']=$v['title']."-".$column['description'];
-//						$data[]=$v;
-//					}
-//					session($k,null);
-//				}
-//			}
-//			
-//			
-//			$id = db('article')->insertAll($data);
-//			//程序运行时间
-//			$endtime = explode(' ',microtime());
-//			$thistime = $endtime[0]+$endtime[1]-($starttime[0]+$starttime[1]);
-//			$thistime = round($thistime,2);
-//			echo "本网页执行耗时：".$thistime." 秒。<br/>";
+			p($_SESSION['gather']);die;
+			foreach($_SESSION['think'] as $k=>$v){
+				if(strstr($k,"gather")){
+					$article = db('article')->where(['title'=>$v['title']])->count('*');
+					$column = db('column')->field('id,title,keywords,description')->where($v['map'])->find();
+					unset($v['map']);
+					if(!$article && !empty($column)){
+						$v['column_id']=$column['id'];
+						$v['keywords']=$v['title']."-".$column['keywords'];
+						$v['description']=$v['title']."-".$column['description'];
+						$data[]=$v;
+					}
+					session($k,null);
+				}
+			}
+			
+			$id = db('article')->insertAll($data);
+			//程序运行时间
+			$endtime = explode(' ',microtime());
+			$thistime = $endtime[0]+$endtime[1]-($starttime[0]+$starttime[1]);
+			$thistime = round($thistime,2);
+			echo "本网页执行耗时：".$thistime." 秒。<br/>";
 		}
 
 //		$list = db('gather')->field('dates',true)->where(['id'=>['lt',2],'status'=>0])->select();
@@ -152,7 +153,6 @@ class Index extends Base{
 			    	}
 			        $ql = QueryList::Query($a['content'],$list)->getData(function($item) use($content){
 			        	$item1= $this->get_article($item['href'],$content)[0];
-						
 						if(count($item1)>0 || $item1!=null){
 							$map=[];
 				        	if(key_exists('tit', $item)){
@@ -175,14 +175,12 @@ class Index extends Base{
 								}else{
 									$item1['date'] = strtotime1($item1['date1']);unset($item1['date1']);
 								}
-								//$item1['content']=htmlspecialchars($item1['content']);
-								//$item1['map']=$map;
+								$item1['content']=htmlspecialchars($item1['content']);
+								$item1['map']=$map;
 							}
 						}
-						p($item1);die;
-						//session("gather_".time(),$item1);
+						session("gather_".time(),$item1,'gather');
 			       });
-				   
 				   return $ql;
 			    },
 			    'error'=>function(){
@@ -190,7 +188,7 @@ class Index extends Base{
 			    }
 			]);
 		}catch(Exception $e) {
-			
+			echo "执行出错了";
 		}
 	}
 	
@@ -248,8 +246,22 @@ class Index extends Base{
 		        'Content-Type' => 'application/default;charset=UTF-8',
 		    ]
 		]);
+		
 		$response = mb_convert_encoding($response->getBody(), 'UTF-8', 'UTF-8,GBK,GB2312,BIG5');
-		$ql = QueryList::Query($response,$rule,$block)->data;
+		//$ql = QueryList::Query($response,$rule,$block)->data;
+		$ql = QueryList::Query($response,$rule,$block)->getData(function($item){
+		    //图片本地化
+		    $item['content'] = QueryList::run('DImage',[
+		            'content' => $item['content'],
+		            'image_path' => '/pull/'.date('Ymd'),
+		            'www_root' => config('UPLOADE.path'),
+		            'attr' => array('data-original','src','data-gif-url'),
+		            'callback' => function($imgObj){
+				        $imgObj->removeAttr('data-gif-url');
+				    }
+		        ]);
+		    return $item;
+		});
 		if(!empty($ql) ){
 			if(!empty($time) && count($ql[0])==3){
 				$ql[0]['date']=$time;
