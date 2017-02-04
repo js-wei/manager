@@ -81,9 +81,9 @@ INSERT INTO `think_admin` (`id`, `gid`, `username`, `password`, `hash`, `status`
 --
 
 CREATE TABLE IF NOT EXISTS `think_article` (
-  `id` mediumint(8) unsigned NOT NULL COMMENT '规则id,自增主键',
+  `id` int(11)  NOT NULL COMMENT '规则id,自增主键',
   `gid` int(11) NOT NULL DEFAULT '0',
-  `column_id` int(1) NOT NULL DEFAULT '0' COMMENT '所属栏目',
+  `column_id` int(11) NOT NULL DEFAULT '0' COMMENT '所属栏目',
   `title` varchar(500) DEFAULT NULL COMMENT '文章中文名称',
   `author` varchar(50) DEFAULT NULL COMMENT '作者:默认Admin',
   `keywords` varchar(500) DEFAULT NULL COMMENT '关键词',
