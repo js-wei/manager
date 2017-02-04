@@ -527,16 +527,16 @@
         },
         {
             "name": "topthink/framework",
-            "version": "v5.0.4",
+            "version": "v5.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/top-think/framework.git",
-                "reference": "c695397733a707d4434fa8f8c070c9caf1f1f369"
+                "reference": "86cc9378a0c46e66dabed6681f8b8de758585ae1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/top-think/framework/zipball/c695397733a707d4434fa8f8c070c9caf1f1f369",
-                "reference": "c695397733a707d4434fa8f8c070c9caf1f1f369",
+                "url": "https://api.github.com/repos/top-think/framework/zipball/86cc9378a0c46e66dabed6681f8b8de758585ae1",
+                "reference": "86cc9378a0c46e66dabed6681f8b8de758585ae1",
                 "shasum": ""
             },
             "require": {
@@ -549,8 +549,7 @@
                 "phpdocumentor/reflection-docblock": "^2.0",
                 "phploc/phploc": "2.*",
                 "phpunit/phpunit": "4.8.*",
-                "sebastian/phpcpd": "2.*",
-                "squizlabs/php_codesniffer": "2.*"
+                "sebastian/phpcpd": "2.*"
             },
             "type": "think-framework",
             "autoload": {
@@ -575,7 +574,7 @@
                 "orm",
                 "thinkphp"
             ],
-            "time": "2016-12-20T00:28:50+00:00"
+            "time": "2017-01-23T05:59:21+00:00"
         },
         {
             "name": "topthink/think-captcha",

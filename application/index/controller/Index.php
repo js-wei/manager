@@ -20,28 +20,29 @@ class Index extends Base{
 			$rule=json_decode($v['rule'],true);
 			$this->threading($links, $rule);
 			$data = [];
-			foreach($_SESSION['think'] as $k=>$v){
+			
+			foreach($_SESSION['gather'] as $k=>$v){
 				if(strstr($k,"gather")){
 					$article = db('article')->where(['title'=>$v['title']])->count('*');
 					$column = db('column')->field('id,title,keywords,description')->where($v['map'])->find();
 					unset($v['map']);
 					if(!$article && !empty($column)){
-						$this->get_image_local($v['countent']);		//本地化图片
+						//$this->get_image_local($v['countent']);		//本地化图片
 						$v['column_id']=$column['id'];
-						$v['keywords']=$v['title']."-".$column['keywords'];
-						$v['description']=$v['title']."-".$column['description'];
+						$v['keywords']=$v['title']."-".$column['keywords']."-".$this->site['keywords'];
+						$v['description']=$v['title']."-".$column['description']."-".$this->site['description'];
 						$data[]=$v;
 					}
-					session($k,null);
+					session($k,null,'gather');
 				}
 			}
-			
+			p($data);die;
 			$id = db('article')->insertAll($data);
 			//程序运行时间
 			$endtime = explode(' ',microtime());
 			$thistime = $endtime[0]+$endtime[1]-($starttime[0]+$starttime[1]);
 			$thistime = round($thistime,2);
-			echo "本网页执行耗时：".$thistime." 秒。<br/>";
+			echo "本线程在次网页执行耗时：".$thistime." 秒。<br/>";
 		}
 	}
 
@@ -87,9 +88,9 @@ class Index extends Base{
 	                    CURLOPT_AUTOREFERER => true,
 			        ],
 			        //设置线程数
-			        'maxThread' => 100,
+			        'maxThread' => 20,
 			        //设置最大尝试数
-			        'maxTry' => 5 
+			        'maxTry' => 3 
 			    ],
 			    'success' => function($a) use($list,$content,$links){
 			    	$response = mb_convert_encoding($a['content'], 'UTF-8', 'UTF-8,GBK,GB2312,BIG5');
@@ -146,8 +147,9 @@ class Index extends Base{
 	protected function get_image_local($content=''){
 		QueryList::run('DImage',[
             'content' => $content,
-            'image_path' => '/pull/'.date('Ymd'),
+            'image_path' => '/uploads/pull/'.date('Ymd'),
             'www_root' => config('UPLOADE.path'),
+            'base_url'=>$this->site['url'],
             'attr' => array('data-original','src','data-gif-url'),
             'callback' => function($imgObj){
 		        $imgObj->removeAttr('data-gif-url');
@@ -172,7 +174,21 @@ class Index extends Base{
 		]);
 		
 		$response = mb_convert_encoding($response->getBody(), 'UTF-8', 'UTF-8,GBK,GB2312,BIG5');
-		$ql = QueryList::Query($response,$rule,$block)->data;
+		//$ql = QueryList::Query($response,$rule,$block)->data;
+		$ql = QueryList::Query($response,$rule,$block)->getData(function($item){
+			$item['content'] = QueryList::run('DImage',[
+	            'content' => $item['content'],
+	            'image_path' => '/pull/'.date('Ymd'),
+	            'www_root' => config('UPLOADE.path'),
+	            'visit_url'=>$this->site['url'],
+	            'attr' => array('src','data-original','data-gif-url'),
+	            'callback' => function($imgObj){
+			        $imgObj->removeAttr('data-gif-url');
+			    }
+	        ]);
+			return $item;
+		});
+		
 		if(!empty($ql) ){
 			if(!empty($time) && count($ql[0])==3){
 				$ql[0]['date']=$time;
