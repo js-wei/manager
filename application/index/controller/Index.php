@@ -20,13 +20,13 @@ class Index extends Base{
 			$rule=json_decode($v['rule'],true);
 			$this->threading($links, $rule);
 			$data = [];
-			p($_SESSION['gather']);die;
 			foreach($_SESSION['think'] as $k=>$v){
 				if(strstr($k,"gather")){
 					$article = db('article')->where(['title'=>$v['title']])->count('*');
 					$column = db('column')->field('id,title,keywords,description')->where($v['map'])->find();
 					unset($v['map']);
 					if(!$article && !empty($column)){
+						$this->get_image_local($v['countent']);		//本地化图片
 						$v['column_id']=$column['id'];
 						$v['keywords']=$v['title']."-".$column['keywords'];
 						$v['description']=$v['title']."-".$column['description'];
@@ -43,59 +43,6 @@ class Index extends Base{
 			$thistime = round($thistime,2);
 			echo "本网页执行耗时：".$thistime." 秒。<br/>";
 		}
-
-//		$list = db('gather')->field('dates',true)->where(['id'=>['lt',2],'status'=>0])->select();
-//		foreach($list as $k => $v){
-//			$arr = json_decode($v['rule'],true);
-//			$result = $this->get_news_list($v['url'],$arr['list']);
-//			foreach($result as $k1 => $v1){
-//				$article = db('article')->where(['title'=>$v1['title']])->count();
-//				if(!$article){
-//					if(!array_key_exists('tit',$v1)){
-//						$v1['tit']=$v['tit'];
-//						$v1['time']='';
-//					}
-//					if(count($v1)>2 && !empty($v1['time'])){
-//						$v1['time'] =date('Y')."-".$v1['time'];
-//					}
-//					ksort($v1);
-//					$_result[$k1] = $this->_get_content($v1['tit'],$v1['href'],$arr['content'],$v1['time']);
-//				}
-//			}
-//		}
-//		$_result = array_filter($_result);
-//		if(!empty($_result)){
-//			 db('article')->insertAll($_result);
-//		}
-	}
-
-	/**
-	 * 抓取内容
-	 */
-	public function _get_content($type,$href,$rule,$time){
-		$str = preg_replace('/[\[\]\{\}]/','',$type);	//去掉[]{}
-		$column = db('column');
-		$article = db('article');
-		$article='';
-		$column_id = $column->field('id,keywords,description')->where(['title'=>$str])->find();
-		
-		if($str!='图片'){
-			$article = $this->get_article($href,$rule,$time);
-			
-			if(count($article)){
-				$_result = [];
-				$article = $article[0];
-				$article['content']=htmlspecialchars($article['content']);
-				$article['column_id']=$column_id['id'];
-				$article['keywords']=$article['title']."_".$column_id['keywords'];
-				$article['description']=$column_id['description']."_".$column_id['description'];
-				#$article['path']=$href;
-				#$article['tit']=$type;
-				
-				$article['date']=strtotime1($article['date']);
-			}
-		}
-		return $article;
 	}
 
 	/**
@@ -120,6 +67,7 @@ class Index extends Base{
 		$res = str_replace("'", '"',$res);
 		p(json_decode($res,true));die;
 	}
+	
 	/**
 	 * 使用多线程
 	 */
@@ -193,43 +141,19 @@ class Index extends Base{
 	}
 	
 	/**
-	 * 得到新闻路径
+	 * 远程图片进行本地化图片
 	 */
-	protected function get_news_list($url='',$rule='',$block=''){
-		$_url=parse_url($url);
-		$headers =[
-			"User-Agent:Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36 OPR/42.0.2393.94",
-			"Host:{$_url['host']}",
-			"Referer:{$_url['scheme']}://{$_url['host']}/"
-		];
-		
-		$return = http($url,'','GET',$headers);
-		
-		if(is_array($return)){
-			$return = $return['data']['article_info'];
-	    }
-		
-		$return=QueryList::Query($return,$rule,$block)->data;
-		return $return;
-	} 
-	
-	/**
-	 * 采集文档列表
-	 */
-	protected function get_article_list($url='',$rule='',$block=''){
-		$client = new GuzzleHttp\Client();
-		$response = $client->request('GET', $url,[
-			'headers' => [
-			 	'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36 OPR/42.0.2393.94',
-		        'Accept'     => 'application/default',
-		        'Content-Encoding' => 'gzip, deflate', 
-		        'Content-Type' => 'application/default;charset=UTF-8',
-		    ]
-		]);
-		$response = mb_convert_encoding($response->getBody(), 'UTF-8', 'UTF-8,GBK,GB2312,BIG5');
-		
+	protected function get_image_local($content=''){
+		QueryList::run('DImage',[
+            'content' => $content,
+            'image_path' => '/pull/'.date('Ymd'),
+            'www_root' => config('UPLOADE.path'),
+            'attr' => array('data-original','src','data-gif-url'),
+            'callback' => function($imgObj){
+		        $imgObj->removeAttr('data-gif-url');
+		    }
+        ]);
 	}
-	
 	/**
 	 * @author 魏巍
 	 * @description 获取详细的文档
@@ -248,20 +172,7 @@ class Index extends Base{
 		]);
 		
 		$response = mb_convert_encoding($response->getBody(), 'UTF-8', 'UTF-8,GBK,GB2312,BIG5');
-		//$ql = QueryList::Query($response,$rule,$block)->data;
-		$ql = QueryList::Query($response,$rule,$block)->getData(function($item){
-		    //图片本地化
-		    $item['content'] = QueryList::run('DImage',[
-		            'content' => $item['content'],
-		            'image_path' => '/pull/'.date('Ymd'),
-		            'www_root' => config('UPLOADE.path'),
-		            'attr' => array('data-original','src','data-gif-url'),
-		            'callback' => function($imgObj){
-				        $imgObj->removeAttr('data-gif-url');
-				    }
-		        ]);
-		    return $item;
-		});
+		$ql = QueryList::Query($response,$rule,$block)->data;
 		if(!empty($ql) ){
 			if(!empty($time) && count($ql[0])==3){
 				$ql[0]['date']=$time;

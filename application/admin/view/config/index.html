@@ -7,8 +7,8 @@
         <div class="widget-body">
             <form id="togglingForm" action="__URL__/add_handler" method="post" enctype="multipart/form-data" class="form-horizontal" autocomplete="off">
                 <div class="form-group">
-                    <label class="col-lg-1 control-label">网站标题<sup>*</sup></label>
-                    <div class="col-lg-4">
+                    <label class="col-md-2 col-lg-2 control-label">网站标题<sup>*</sup></label>
+                    <div class="col-md-6 col-md-6 col-lg-6">
                         <input type="text" name="title" value="<notempty name="info">{$info.title}</notempty>" class="form-control" id="name" placeholder="网站标题"/>
                         <input type="hidden" name="id" value="<notempty name='info'>{$info.id}</notempty>">
                         <!--<ul class="points text-warning">
@@ -24,8 +24,14 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-1 control-label">网站关键词</label>
-                    <div class="col-lg-4">
+                    <label class="col-md-2 col-lg-2 control-label">网站域名<sup>*</sup></label>
+                    <div class="col-md-6 col-md-6 col-lg-6">
+                        <input type="text" name="url" value="<notempty name="info">{$info.url}</notempty>" class="form-control" id="url" placeholder="网站域名"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">网站关键词</label>
+                    <div class="col-md-6 col-lg-6">
                         <textarea name="keywords" class="form-control" rows="5" placeholder="文档关键词"><notempty name="info">{$info.keywords}</notempty></textarea>
                         <!--<ul class="points text-warning">
                             <li>关键词(keywords)访问者不可见的,通过查看源代码可以看到,主要作用是告诉搜索引擎,这个网站内容是什么</li>
@@ -39,8 +45,8 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-1 control-label">网站说明</label>
-                    <div class="col-lg-4">
+                    <label class="col-md-2 col-lg-2 control-label">网站说明</label>
+                    <div class="col-md-6 col-lg-6">
                         <textarea name="description" class="form-control" rows="6" placeholder="网站说明"><notempty name="info">{$info.description}</notempty></textarea>
                         <!--<ul class="points text-warning">
                             <li>描述(description),提供的网页简短描述通常是为搜索引擎描述网页使用的</li>
@@ -51,7 +57,7 @@
                     </div>
                 </div>
                <div class="form-group">
-                    <label class="col-lg-1 control-label">网站LOGO</label>
+                    <label class="col-md-2 col-lg-2 control-label">网站LOGO</label>
                     <div class="col-lg-2">
                         <div>
                             <div style="float:left; margin-top:8px;margin-right:6px;"><input type="button" name="logo" id="fileImg" size="16" value="上传" class="table_btn"/></div>
@@ -70,11 +76,135 @@
                         </div>
                     </div>
                 </div>
-                
-               
+                <div class="form-group">
+                    <label class="col-md-2 col-lg-2 control-label">启用轮播</label>
+                    <div class="col-lg-6">
+                        <div class="radio pull-left">
+                            <label>
+                                <input name="carousel" type="radio" value="0" class="colored-success" <notempty name="info"><eq name="info.carousel" value="0">checked="checked"</eq><else />checked="checked"</notempty>>
+                                <span class="text">是</span>
+                            </label>
+                        </div>
+                        <div class="radio pull-left">
+                            <label>
+                                <input name="carousel" type="radio" value="1" class="colored-danger" <notempty name="info"><eq name="info.carousel" value="1">checked="checked"</eq></notempty>>
+                                <span class="text">否</span>
+                            </label>
+                        </div>
+                        <div class="radio hide">
+                            <label>
+                                <input name="carousel" type="radio" class="colored-blueberry">
+                                <span class="text"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 col-lg-2 control-label">轮播个数</label>
+                    <div class="col-md-6 col-lg-2">
+                        <input type="text" name="sum" value="<notempty name="info">{$info.sum}</notempty>" class="form-control" id="sum" placeholder="轮播个数"/>
+                        <div class="text-danger">
+                        	*0代表全部,负数不显示,正数显示个数
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 col-lg-2 control-label">联系固话</label>
+                    <div class="col-md-6 col-lg-2">
+                        <input type="text" name="tel" value="<notempty name="info">{$info.tel}</notempty>" class="form-control" id="tel" placeholder="联系固话"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 col-lg-2 control-label">联系手机</label>
+                    <div class="col-md-6 col-lg-2">
+                        <input type="text" name="phone" value="<notempty name="info">{$info.phone}</notempty>" class="form-control" id="phone" placeholder="联系手机"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 col-lg-2 control-label">联系传真</label>
+                    <div class="col-md-6 col-lg-2">
+                        <input type="text" name="fax" value="<notempty name="info">{$info.fax}</notempty>" class="form-control" id="fax" placeholder="联系传真"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 col-lg-2 control-label">联系邮箱</label>
+                    <div class="col-md-6 col-lg-2">
+                        <input type="text" name="email" value="<notempty name="info">{$info.email}</notempty>" class="form-control" id="email" placeholder="联系邮箱"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 col-lg-2 control-label">联系地址</label>
+                    <div class="col-md-6 col-lg-6">
+                        <input type="text" name="address" value="<notempty name="info">{$info.address}</notempty>" class="form-control" id="address" placeholder="联系地址"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 col-lg-2 control-label">版权信息</label>
+                    <div class="col-md-6 col-lg-6">
+                        <input type="text" name="copyright" value="<notempty name="info">{$info.copyright}</notempty>" class="form-control" id="copyright" placeholder="版权信息"/>
+                    </div>
+                </div>
+                <div class="form-group">
+	                <label class="col-md-2 col-lg-2 control-label">友情链接</label>
+	                <div class="col-lg-6">
+	                    <div class="radio pull-left">
+	                        <label>
+	                            <input name="flink" type="radio" value="0" class="colored-success" <notempty name="info"><eq name="info.flink" value="0">checked="checked"</eq><else />checked="checked"</notempty>>
+	                            <span class="text">是</span>
+	                        </label>
+	                    </div>
+	                    <div class="radio pull-left">
+	                        <label>
+	                            <input name="flink" type="radio" value="1" class="colored-danger" <notempty name="info"><eq name="info.flink" value="1">checked="checked"</eq></notempty>>
+	                            <span class="text">否</span>
+	                        </label>
+	                    </div>
+	                    <div class="radio hide">
+	                        <label>
+	                            <input name="flink" type="radio" class="colored-blueberry">
+	                            <span class="text"></span>
+	                        </label>
+	                    </div>
+	                </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 col-lg-2 control-label">启用分享</label>
+                    <div class="col-lg-6">
+                        <div class="radio pull-left">
+                            <label>
+                                <input name="is_shard" type="radio" value="0" class="colored-success" <notempty name="info"><eq name="info.is_shard" value="0">checked="checked"</eq><else />checked="checked"</notempty>>
+                                <span class="text">是</span>
+                            </label>
+                        </div>
+                        <div class="radio pull-left">
+                            <label>
+                                <input name="is_shard" type="radio" value="1" class="colored-danger" <notempty name="info"><eq name="info.is_shard" value="1">checked="checked"</eq></notempty>>
+                                <span class="text">否</span>
+                            </label>
+                        </div>
+                        <div class="radio hide">
+                            <label>
+                                <input name="is_shard" type="radio" class="colored-blueberry">
+                                <span class="text"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 col-lg-2 control-label">分享代码</label>
+                    <div class="col-md-6 col-lg-6">
+                        <textarea name="shard" class="form-control" rows="5" placeholder="分享代码"><notempty name="info">{$info.shard}</notempty></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 col-lg-2 control-label">统计代码</label>
+                    <div class="col-md-6 col-lg-6">
+                        <textarea name="code" class="form-control" rows="5" placeholder="统计代码"><notempty name="info">{$info.code}</notempty></textarea>
+                    </div>
+                </div>
                 <hr class="wide" />
                 <div class="form-group">
-                    <div class="col-lg-4 col-lg-offset-1">
+                    <div class="col-md-6 col-lg-6 col-lg-offset-2">
                         <button type="submit" class="btn btn-danger col-lg-2">提交</button>
                         <button type="button" class="btn btn-warning col-lg-2 ml10" onclick="window.history.go(-1);">返回</button>
                     </div>
@@ -128,10 +258,10 @@
                         }
                     }
                 },
-                uri:{
+                url:{
                     validators: {
                         notEmpty: {
-                            message: '请输入网址'
+                            message: '请输入域名'
                         }
                     }
                 },
@@ -215,10 +345,10 @@
             shade: [0.4,'#fff'] //0.1透明度的白色背景
         });
         $.post("{:Url('Uploadify/delmg')}",{src:url},function(data){
+        	layer.close(index);
             if(data.status==1){
                 layer.msg(data.msg,{icon:1,end:function () {
-                    layer.closeAll();
-                    $(obj).parent('span.imageDiv').remove();
+                	$(obj).parent('span.imageDiv').remove();
                 }});
             }else{
                 layer.msg(data.msg,{icon:5});

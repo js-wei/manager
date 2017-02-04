@@ -6,7 +6,7 @@ class Config extends Base{
 		parent::_initialize();
 	}
 
-	public function basic(){
+	public function index(){
 		$model = [
 			'name'=>'网站设置'
 		];
@@ -55,6 +55,8 @@ class Config extends Base{
 	 */
 	public function add_handler($id=0){
 		$param = request()->param();
+		$param['shard'] = htmlspecialchars($param['shard']);
+		$param['code'] = htmlspecialchars($param['code']);
 		if($id){
 			$param['dates']=time();
 			if(!db('config')->update($param)){

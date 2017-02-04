@@ -14,7 +14,7 @@ class article extends Base{
 		if($aid){
 			$where['column_id']=$aid;
 		}
-		$list = db('article')->where($where)->order('date desc')->paginate(10);
+		$list = db('article')->where($where)->order('date desc')->paginate(15);
 		// 查询状态为1的用户数据 并且每页显示10条数据
 		$count = db('article')->count('*');
 		$this->assign('count',$count);
