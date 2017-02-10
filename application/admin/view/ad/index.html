@@ -19,7 +19,7 @@
             </div>
             <div class="widget-body">
             	<div class="col-xs-4 col-md-6">
-                    <a href="__URL__/add?aid={:input('aid')}" class="btn btn-success">添加文档</a>
+                    <a href="__URL__/add?aid={:input('aid')}" class="btn btn-success">添加广告</a>
                     <a href="__URL__/status" data-role="forbidden" class="btn btn-warning status">选中禁用</a>
                     <a href="__URL__/status" data-role="enable" class="btn btn-info status">选中启用</a>
                     <a href="__URL__/status" data-role="delete-all" class="btn btn-danger status">选中删除</a>
@@ -74,14 +74,14 @@
 	                            <td>
 	                                {$vo.url}
 	                            </td>
-	                            <td>
-	                                <img src="{$vo.image}" height="50">
+	                            <td class="tips" data-type="3">
+	                                <img src="{$vo.image}" height="20">
 	                            </td>
 	                            <td>
 	                               {$vo.date|date='Y-m-d H:i:s',###}
 	                            </td>
 	                            <td class="center ">
-	                               <eq name="vo.status" value="0"> <span class="text-success">正常</span><else /><span class="text-danger">禁用</span> </eq>
+	                               <eq name="vo.status" value="0"><span class="text-success">正常</span><else /><span class="text-danger">禁用</span></eq>
 	                            </td>
 	                            <td>
 	                            	<a href="__URL__/add?id={$vo['id']}">编辑</a>

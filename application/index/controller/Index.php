@@ -5,7 +5,7 @@ use GuzzleHttp;
 
 class Index extends Base{
     public function index(){
-    	p(config('UPLOADE.path'));
+    	
 	}
 	/**
 	 * 抓取数据
@@ -36,7 +36,6 @@ class Index extends Base{
 					session($k,null,'gather');
 				}
 			}
-			p($data);die;
 			$id = db('article')->insertAll($data);
 			//程序运行时间
 			$endtime = explode(' ',microtime());

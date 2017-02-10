@@ -27,12 +27,6 @@
     $(function(){
     	layui.use('layer', function(){
 		  var layer = layui.layer;
-			  /**
-	         * [退出]
-	         * @param  {[type]} e)               {                   e.preventDefault();                           var index [description]
-	         * @param  {[type]} function(result) {                                          layer.close(index);                                 if (result.status [description]
-	         * @return {[type]}                  [description]
-	         */
 	        $('.logout').on('click',function(e) {
 	            e.preventDefault();
 	            var index = layer.load(2, {
@@ -54,13 +48,6 @@
 	                }
 	            });
 	        });
-	
-	        /**
-	         * [修改状态]
-	         * @param  {[type]} e)           {                   e.preventDefault();                                          var url [请求地址]
-	         * @param  {String} function(){                                                $('.checkboxes').each(function(){                                       if($(this).is(':checked')){                        q + [操作参数]
-	         * @return {[type]}              [description]
-	         */
 	        $('.status').on('click',function(e) {
 	            e.preventDefault();
 	            var url = $(this).attr('href');
@@ -199,6 +186,7 @@
 	    				layer.open({
 						  type: 1,
 						  title: '新闻采集规则查询',
+						  skin: 'layui-layer-rim', //加上边框
 						  shadeClose: true,
 						  shade: 0.8,
 						  area: ['50%', '500px'],
@@ -212,6 +200,16 @@
 					  skin: 'layui-layer-rim', //加上边框
 					  area: ['550px', '250px'], //宽高
 					  content: '<div class="mt10 ml10">'+data+'</div>'
+					});
+	    			break;
+	    		case '3':
+	    			var image = $(this).children('img').attr('src');
+	    			layer.open({
+					  type: 1,
+					  title:'查看图片',
+					  skin: 'layui-layer-rim', //加上边框
+					  area: ['650px', '340px'], //宽高
+					  content: '<div class="mt10 ml10"><img src="'+image+'"></div>'
 					});
 	    			break;
 	    	}

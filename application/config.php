@@ -56,7 +56,6 @@ return [
 		'FROM_EMAIL'=>'jswei30@163.com',
 		'FROM_NAME'=>'官方邮件'
 	],
-	
 	'UPLOADE'=>[
 		'path'=>ROOT_PATH . 'public' . DS.'uploads',
 	],
