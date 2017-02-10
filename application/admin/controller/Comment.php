@@ -86,7 +86,7 @@ class Comment extends Base{
 	 */
 	public function status($id,$type){
 		$type = ($type=="delete-all")?"delete":$type;
-		$_result = $this->_status($id,'comment',$type,'ico');
+		$_result = $this->_status($id,'comments',$type,'');
 		return $_result;
 	}
 }

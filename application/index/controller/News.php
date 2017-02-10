@@ -33,7 +33,7 @@ class News extends Base{
   		$list['page_count']=ceil($total/Config('paginate.list_rows'));
   		ksort($list);
 		  //[图文] http://news.qq.com/a/20170116/000730.htm => .hdBigPic.js
-   		return  jsonp($list);
+   		return $list;
    }
    /**
     * [details 获取详细信息]

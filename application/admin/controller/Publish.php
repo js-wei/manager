@@ -2,12 +2,58 @@
 namespace app\admin\controller;
 use think\Controller;
 
-class User extends Controller {
+class Publish extends Base {
 	
-	public function login(){
-		$ip = db('intercept')->order('id desc')->find();
-		check_ip($ip['rule']);
+	public function index(){
+		$admin = db('admin')->field('gid,username,status,last_date,last_ip')->find(session('_id'));
+		$this->assign('title','栏目管理');
+		$this->assign('user',$admin);
 		return view();
+	}
+	
+	public function exchange(){
+		return view();
+	}
+	/**
+	 * 修改密码
+	 */
+	public function exchange_handler($old_password='',$new_password='',$confirm_password=''){
+		if(!request()->isPOST()){
+			return json(['status'=>0,'msg'=>'非法的请求']);
+		}
+		$id = session('_id');
+		if(empty($id)){
+			return ['status'=>0,'msg'=>'请先登录在修改密码'];
+		}
+		if(empty($old_password)){
+			return ['status'=>0,'msg'=>'请输入原始密码'];
+		}
+		if(empty($new_password)){
+			return ['status'=>0,'msg'=>'请输入新的密码'];
+		}
+		if(empty($confirm_password)){
+			return ['status'=>0,'msg'=>'请输入确认密码'];
+		}
+		$user = db('admin')->field('password,id')->find($id);
+		$pwd= substr(md5($new_password),10,15);
+		$old_password =  substr(md5($old_password),10,15);
+		if($user['password']!=$old_password){
+			return ['status'=>0,'msg'=>'原始密码输入不正确'];
+		}
+		if($confirm_password!=$new_password){
+			return ['status'=>0,'msg'=>'新的密码与确认密码不一致'];
+		}
+		if(!db('admin')->update([
+			'id'=>$id,
+			'password'=>$pwd,
+			'date'=>time()
+		])){
+			return ['status'=>0,'msg'=>'密码修改失败,请稍后再试'];
+		}
+		session('_id',null);
+		session('_name',null);
+		session('_logined',null);
+		return ['status'=>1,'msg'=>'密码修改成功,请重新登录','redirect'=>Url('user/login')];
 	}
 	/**
 	 * [login_handler 登录操作]
@@ -19,9 +65,9 @@ class User extends Controller {
 	 */
 	public function login_handler($username='',$password='',$verify=''){
 		
-		if(!captcha_check($verify)){
-		 	return array('status'=>0,'msg'=>'请填写正确的验证码');
-		}
+//		if(!captcha_check($verify)){
+//		 	return array('status'=>0,'msg'=>'请填写正确的验证码');
+//		}
 		
 		$pwd = substr(input('password','','MD5'),10,15);
 		$username=strtolower(input('username'));

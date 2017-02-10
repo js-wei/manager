@@ -10,4 +10,9 @@ return [
 	    '__SELF__'=>$_SERVER['REQUEST_URI'] 
 	],
 	'PAGE_SIZE'=>15,
+	'session'                => [
+	    'prefix'         => 'think',
+	    'type'           => '',
+	    'auto_start'     => true,
+	],
 ];
