@@ -169,9 +169,9 @@ class Index extends Base{
 		        'Accept'     => 'application/json',
 		        'Content-Encoding' => 'gzip, deflate', 
 		        'Content-Type' => 'application/default;charset=UTF-8',
+		        'CURLOPT_REFERER'=>$url
 		    ]
 		]);
-		
 		$response = mb_convert_encoding($response->getBody(), 'UTF-8', 'UTF-8,GBK,GB2312,BIG5');
 		//$ql = QueryList::Query($response,$rule,$block)->data;
 		$ql = QueryList::Query($response,$rule,$block)->getData(function($item){

@@ -16,6 +16,7 @@ class Base extends Controller{
 		$this->assign('controller',strtolower($this->controller));
 		$this->assign('module',strtolower($this->module));
 		$this->site = db('Config')->order('id asc')->find();
+		session('site',$this->site);
     }
 
 }

@@ -39,11 +39,20 @@ class Article extends Model{
      * @return mixed
      */
     protected  function get_article($id){
+<<<<<<< HEAD
         $article = db('article')->field('id,column_id,title,author,keywords,description,image,content,hits,date')->find($id);
         $article['content']=htmlspecialchars_decode($article['content']);
         $temp = $article['date'];
         $article['date']=date('Y-m-d',$temp);
         $article['date1']=date('Y-m-d H:i:s',$temp);
+=======
+        $article =  db('Article')->field('date',true)->find($id);
+        $article['content'] = htmlspecialchars_decode($article['content']);
+        $content = $article['content'];
+        $url = session('site.url').'/uploads/pull/';
+        $pattern = '/\/pull\//';
+        $article['content'] = preg_replace($pattern,$url,$content);
+>>>>>>> 205faae7a1d7d1b717586bfeb814d91e8d3b300f
         return $article;
     }
 
