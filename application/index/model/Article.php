@@ -39,7 +39,12 @@ class Article extends Model{
      * @return mixed
      */
     protected  function get_article($id){
-        return db('Article')->field('date',true)->find($id);
+        $article = db('article')->field('id,column_id,title,author,keywords,description,image,content,hits,date')->find($id);
+        $article['content']=htmlspecialchars_decode($article['content']);
+        $temp = $article['date'];
+        $article['date']=date('Y-m-d',$temp);
+        $article['date1']=date('Y-m-d H:i:s',$temp);
+        return $article;
     }
 
     /**

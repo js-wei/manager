@@ -13,7 +13,7 @@ class News extends Base{
   		if($id){
   			$map['column_id']=$id;
   		}
-     	$list = db('article')->field('id,title,author,keywords,description,content')->where($map)->paginate();
+     	$list = db('article')->field('id,title,author,keywords,description,content,date')->where($map)->paginate();
   		$total = db('article')->where($map)->count('id');
   		
   		$list = \Service\Object2Array::parse1($list);
@@ -23,7 +23,10 @@ class News extends Base{
   		}
   		
   		foreach($list['data'] as $k => $v){
+        //p($v['date']);die;
   			$content = htmlspecialchars_decode($v['content']);
+        $list['data'][$k]['date']=date('Y-m-d',$v['date']);
+        $list['data'][$k]['url']=$this->site['url'].Url('/news/details?id='.$v['id']);
   			$image = get_image($content);
   			if(!empty($image)){
   				$list['data'][$k]['image']=$image[0];
@@ -42,6 +45,6 @@ class News extends Base{
     */
    public function getdetails($id=0){
    		$m = new Article($id);
-	    return jsonp($m->getAllData());
+	    return $m->getAllData();
    }
 }
