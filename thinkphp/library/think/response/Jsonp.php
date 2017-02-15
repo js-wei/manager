@@ -37,16 +37,14 @@ class Jsonp extends Response
         try {
             // 返回JSON数据格式到客户端 包含状态信息 [当url_common_param为false时是无法获取到$_GET的数据的，故使用Request来获取<xiaobo.sun@qq.com>]
             $var_jsonp_handler = Request::instance()->param($this->options['var_jsonp_handler'], "");
-           
-            $handler = config('default_jsonp_handler')?config('default_jsonp_handler'):$this->options['default_jsonp_handler'];
-           
-            $handler = input('callback')?input('callback'):$handler;
-            
+            $handler           = !empty($var_jsonp_handler) ? $var_jsonp_handler : $this->options['default_jsonp_handler'];
+
             $data = json_encode($data, $this->options['json_encode_param']);
 
             if ($data === false) {
                 throw new \InvalidArgumentException(json_last_error_msg());
             }
+
             $data = $handler . '(' . $data . ');';
             return $data;
         } catch (\Exception $e) {
