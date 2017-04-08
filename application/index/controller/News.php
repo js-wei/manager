@@ -13,14 +13,9 @@ class News extends Base{
   		if($id){
   			$map['column_id']=$id;
   		}
-<<<<<<< HEAD
-     	$list = db('article')->field('id,title,author,keywords,description,content,date')->where($map)->paginate();
-=======
+
      	$list = db('article')->field('id,title,author,keywords,description,date')->where($map)->order('date desc')->paginate();
-     
->>>>>>> 205faae7a1d7d1b717586bfeb814d91e8d3b300f
-  		$total = db('article')->where($map)->count('id');
-  		
+       
   		$list = \service\Object2Array::parse1($list);
   		
   		if(empty($list['data'])){
@@ -28,17 +23,16 @@ class News extends Base{
   		}
   		
   		foreach($list['data'] as $k => $v){
-<<<<<<< HEAD
+
         //p($v['date']);die;
   			$content = htmlspecialchars_decode($v['content']);
         $list['data'][$k]['date']=date('Y-m-d',$v['date']);
         $list['data'][$k]['url']=$this->site['url'].Url('/news/details?id='.$v['id']);
   			$image = get_image($content);
-=======
+
         $list['data'][$k]['url'] = $this->site['url'].Url('/news/details?id='.$v['id']);
   			//$content = htmlspecialchars_decode($v['content']);
   			//$image = get_image($content);
->>>>>>> 205faae7a1d7d1b717586bfeb814d91e8d3b300f
   			if(!empty($image)){
   				$list['data'][$k]['image']=$image[0];
   			}

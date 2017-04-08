@@ -5,7 +5,12 @@ use GuzzleHttp;
 
 class Index extends Base{
     public function index(){
-    	
+    	//$parsedown = new \service\Parsedown();
+    	// $parsedown = new \service\ParsedownExtra();
+    	// $parsedown = new \service\Parser();
+    	// $c = file_get_contents('./data/mark.md');
+    	// echo $parsedown->makeHtml($c);
+    	p(1);
 	}
 	/**
 	 * 抓取数据

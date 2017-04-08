@@ -61,7 +61,7 @@ return [
 	],
     'UPLOADE_IMAGE'=>[
         'size'=>1024*1024*5,        //5M最大
-        'ext'=>'jpg,png,gif'
+        'ext'=>'jpg,png,gif,bmp,webp'
     ],
     'UPLOADE_FILE'=>[
         'size'=>1024*1024*8,        //8M最大

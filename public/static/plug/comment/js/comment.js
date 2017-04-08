@@ -97,7 +97,7 @@
 				var html = '';
 				html += '<div id="commentItems" class="comments" style="margin-bottom:10px;">';
 				if(para.header!=''){
-					html += '	<div class="text" style="font-size:2rem;padding-bottom:10px;border-bottom: 1px solid #DFDFDF;">'+para.header+'</div>';
+					html += '<div class="text" style="font-size:2rem;padding-bottom:10px;border-bottom: 1px solid #DFDFDF;">'+para.header+'</div>';
 				}
 				html += '</div>';
 				$(self).append(html);
@@ -120,7 +120,6 @@
 					if(v.sortID==0){  
 						$("#commentItems").append(item);
 					}else{ 
-						
 						if($("#comment"+v.sortID).find(".comments").length==0){ 
 							var comments = '';
 							comments += '<div id="comments'+v.sortID+'" class="comments">'+item+'</div>';
