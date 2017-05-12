@@ -11,10 +11,6 @@
 
 // 应用公共文件
 
-
-
-
-
 /**
  * 打印函数
  * @param array $array
@@ -51,7 +47,11 @@ function & load_wechat($type = '',$platform='') {
     return $wechat[$index];
 }
 
-//去除转义字符 
+/**
+ * 去除转义字符
+ * @param $array
+ * @return mixed
+ */
 function stripslashes_array(&$array) { 
 	while(list($key,$var) = each($array)) { 
 		if ($key != 'argc' && $key != 'argv' && (strtoupper($key) != $key || ''.intval($key) == "$key")) { 
@@ -65,8 +65,11 @@ function stripslashes_array(&$array) {
 	} 
 	return $array; 
 }
-/**
+
+/***
  * 判断是否存在汉字
+ * @param $str
+ * @return bool
  */
 function has_chiness($str){
 	if(preg_match('/^[\x{4e00}-\x{9fa5}]+$/u', $str)>0){
@@ -78,9 +81,11 @@ function has_chiness($str){
 	}
 	return $flag;
 }
+
 /**
- *日期转成时间戳
- *含特殊的汉字日期
+ * 日期转成时间戳含特殊的汉字日期
+ * @param $str
+ * @return false|int
  */
 function strtotime1($str){
 	if(has_chiness($str)){
@@ -150,9 +155,12 @@ function dump($var, $echo=true, $label=null, $strict=true) {
     }else
         return $output;
 }
+
 /**
+ * 检测邮箱格式
  * @author 魏巍
- * @description 检测邮箱格式
+ * @param $email
+ * @return bool
  */
 function check_email($email){
 	$pattern = "/^([0-9A-Za-z\\-_\\.]+)@([0-9a-z]+\\.[a-z]{2,3}(\\.[a-z]{2})?)$/i";
@@ -162,14 +170,15 @@ function check_email($email){
 		return false;
 	}
 }
+
 /**
- * @author 魏巍
- * @description 计算时间差
- * @param int $start 开始时间戳
- * @param int $end 	 结束时间戳
+ * 时间差
+ * @param int $start    开始时间
+ * @param int $end      结束时间
+ * @return array        时间差
  */
-function time_diff($start,$end){
-	$end = time();
+function time_diff($start=0,$end=0){
+	$end = $end?$end:time();
 	$cha = $end -$start;
  
 	$minute=floor($cha/60);
@@ -181,17 +190,23 @@ function time_diff($start,$end){
 		'day'=>$day
 	];
 }
+
 /**
  * 密码加密函数
+ * @param string $val   加密字符串
+ * @return mixed
  */
-function getEncyptStr($val) {
+function getEncyptStr($val='') {
 	vendor('Encrypt');
 	return EncryptCopy::encryptByKey ($val,config('ENCRYPT_KEY'));
 }
+
 /**
  * 密码解密函数
+ * @param string $val   解密字符串
+ * @return mixed
  */
-function getDeEncyptStr($val) {
+function getDeEncyptStr($val='') {
 	vendor('Encrypt');
 	return EncryptCopy::decryptByKey ($val,config('ENCRYPT_KEY'));
 }
@@ -218,9 +233,10 @@ function get_first_last_week_day(){
 }
 
 /**
- * [split_content 拆分内容]
- * @param  string $content [内容]
- * @return array           [description]
+ * 拆分内容
+ * @param $content
+ * @param string $separator
+ * @return string
  */
 function split_content($content,$separator="，,。"){
 	$separator = explode(',', $separator);
@@ -229,7 +245,8 @@ function split_content($content,$separator="，,。"){
 	$str = tagstr(trim_all($content));
 	$str=str_replace('，',' ',str_replace('。',' ',$str));
 	$result = explode(' ',$str);
-	$start_index =0; 
+	$start_index =0;
+    $_result=[];
 
 	for ($i=0; $i < count($result)-1; $i++){ 
 
@@ -280,8 +297,7 @@ function csv_get_lines($csvfile, $lines, $offset = 0) {
 function get_next_split_content($content,$query,$separator="，,。"){
 	
 	$separator = explode(',', $separator);
-	//p($separator);die;
-	$result =  array();
+	$result = [];
 	$content = htmlspecialchars_decode($content);
 	$str = tagstr(trim_all($content));
 	$str=str_replace('，',' ',str_replace('。',' ',$str));
@@ -313,10 +329,11 @@ function get_next_split_content($content,$query,$separator="，,。"){
 	
 	return $_result;
 }
+
 /**
- * [filter_mark 去除标点符号]
- * @param  [type] $text [description]
- * @return [type]       [description]
+ * 去除标点符号
+ * @param $text
+ * @return string
  */
 function filter_mark($text){
 	if(trim($text)=='') return '';
@@ -325,20 +342,22 @@ function filter_mark($text){
 	$text=preg_replace("/(%7E|%60|%21|%40|%23|%24|%25|%5E|%26|%27|%2A|%28|%29|%2B|%7C|%5C|%3D|\-|_|%5B|%5D|%7D|%7B|%3B|%22|%3A|%3F|%3E|%3C|%2C|\.|%2F|%A3%BF|%A1%B7|%A1%B6|%A1%A2|%A1%A3|%A3%AC|%7D|%A1%B0|%A3%BA|%A3%BB|%A1%AE|%A1%AF|%A1%B1|%A3%FC|%A3%BD|%A1%AA|%A3%A9|%A3%A8|%A1%AD|%A3%A4|%A1%A4|%A3%A1|%E3%80%82|%EF%BC%81|%EF%BC%8C|%EF%BC%9B|%EF%BC%9F|%EF%BC%9A|%E3%80%81|%E2%80%A6%E2%80%A6|%E2%80%9D|%E2%80%9C|%E2%80%98|%E2%80%99|%EF%BD%9E|%EF%BC%8E|%EF%BC%88)+/",' ',$text);
 	$text=urldecode($text);
 	return trim($text);
-} 
+}
 
 /**
  * 去除空格
- * @param $str          字符串
- * @return string       结果
+ * @param string $str
+ * @return mixed
  */
-function trim_all($str){
+function trim_all($str=''){
 	$q=array(" ","　","\t","\n","\r");
 	$h=array("","","","","");
 	return str_replace($q,$h,$str);
 }
+
 /**
- * [getMacAddr 生成MAC]
+ * 生成MAC
+ * @return mixed|string
  */
 function getMacAddr(){
 	$return_array = array();
@@ -368,13 +387,12 @@ function build_order_no(){
 	return date('Ymd').substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
 }
 
-
 /**
  * 列出目录下的所有文件
- * @param str $path 目录
- * @param str $exts 后缀
- * @param array $list 路径数组
- * @return array 返回路径数组
+ * @param $path
+ * @param string $exts
+ * @param array $list
+ * @return array
  */
 function dir_list($path, $exts = '', $list = array()) {
 	$path = dir_path($path);
@@ -400,13 +418,15 @@ function dir_path($path) {
 	if (substr($path, -1) != '/') $path = $path . '/';
 	return $path;
 }
+
 /**
- * [NoRand 不重复随机数]
- * @param integer $begin [description]
- * @param integer $end   [description]
- * @param integer $limit [description]
+ * 不重复随机数
+ * @param int $begin
+ * @param int $end
+ * @param int $limit
+ * @return string
  */
-function NoRand($begin=0,$end=20,$limit=4){
+function noRand($begin=0,$end=20,$limit=4){
 	$rand_array=range($begin,$end);
 	shuffle($rand_array);//调用现成的数组随机排列函数
 	return implode('',array_slice($rand_array,0,$limit));//截取前$limit个
@@ -442,8 +462,6 @@ function get_client_ip($type = 0,$adv=false) {
 	return $ip[$type];
 }
 
-
-
 /**
  * 判断黑白天
  * @return bool
@@ -458,6 +476,11 @@ function day_or_night(){
 	}
 }
 
+/**
+ * unicode 编码
+ * @param $word
+ * @return mixed|string
+ */
 function unicode_encode ($word){
 	$word0 = iconv('gbk', 'utf-8', $word);
 	$word1 = iconv('utf-8', 'gbk', $word0);
@@ -466,12 +489,20 @@ function unicode_encode ($word){
 	$word = preg_replace_callback('/\\\\u(\w{4})/', create_function('$hex', 'return \'&#\'.hexdec($hex[1]).\';\';'), substr($word, 1, strlen($word)-2));
 	return $word;
 }
-function unicode_decode ($uncode){
-	$word = json_decode(preg_replace_callback('/&#(\d{5});/', create_function('$dec', 'return \'\\u\'.dechex($dec[1]);'), '"'.$uncode.'"'));
+
+/**
+ * unicode 解码
+ * @param string $uncode
+ * @return mixed
+ */
+function unicode_decode ($word=''){
+	$word = json_decode(preg_replace_callback('/&#(\d{5});/', create_function('$dec', 'return \'\\u\'.dechex($dec[1]);'), '"'.$word.'"'));
 	return $word;
 }
+
 /**
  * 检测访问的ip是否为规定的允许的ip
+ * @param string $ip
  */
 function check_ip($ip=''){
 	$ip = $ip?$ip:'0.0.0.0,*.*.*.*,127.0.0.1';
@@ -529,6 +560,10 @@ function color_txt($str,$size=20,$bold=false){
 	return $colorTxt;
 }
 
+/**
+ * 随机颜色
+ * @return string
+ */
 function rand_color(){
 	return '#'.sprintf("%02X",mt_rand(0,255)).sprintf("%02X",mt_rand(0,255)).sprintf("%02X",mt_rand(0,255));
 }
@@ -562,7 +597,8 @@ function replace_phiz($content){
  * @return string|string
  */
 function sub_str($str,$start=0,$length,$suffix=true,$charset="utf-8"){
-	if(strlen($str)==0){
+    $slice=[];
+    if(strlen($str)==0){
 		return ;
 	}
 	$l=strlen($str);
@@ -587,14 +623,15 @@ function sub_str($str,$start=0,$length,$suffix=true,$charset="utf-8"){
 		}
 	} 
 }
+
 /**
- * [paichu 去掉指定的字符串]
- * @param  [type] $mub [description]
- * @param  [type] $zhi [description]
- * @param  [type] $a   [description]
- * @return [type]      [description]
+ * 去掉指定的字符串
+ * @param string $mub       字符串
+ * @param string $zhi       指定字符
+ * @param string $a         查找方向
+ * @return bool|mixed|string
  */
-function paichu($mub,$zhi,$a='l'){
+function pai_chu($mub='',$zhi='',$a='l'){
 	if(!$mub){
 		return "被替换的字符串不存在";
 	}
@@ -607,56 +644,68 @@ function paichu($mub,$zhi,$a='l'){
 	}elseif($a=="r"){
 		$last = substr($mub, strrpos($mub,$zhi));
 	}elseif($a=="l"){
-		//$last = preg_replace("/[\d\D\w\W\s\S]*[".$mub."]+/","",$zhi);
 		$last = substr($mub,0,strrpos($mub,$zhi));
 	}
-	//$last =  mb_convert_encoding($last,'UTF-8','GB2312'); 
 	return $last;
 
 }
+
 /**
- * [get_image 获取文档中的图片]
- * @param  [type] $str [文档]
- * @return [type]      [description]
+ * 获取内容中的图片
+ * @param string $str   内容
+ * @return mixed
  */
-function get_image($str){
+function get_image($str=''){
 	$pattern="/<[img|IMG].*?src=[\'|\"](.*?(?:[\.gif|\.jpg]))[\'|\"].*?[\/]?>/"; 
 	preg_match_all($pattern,$str,$match); 
 	return $match[1]; 
 }
-//高亮关键词
-function heigLine($key,$content){
-	return preg_replace('/'.$key.'/i', '<font color="red"><b>'.$key.'</b></font>', $content);
+
+/**
+ * 高亮关键词
+ * @param string $key       关键词
+ * @param string $content   内容
+ * @param string $class     高亮class
+ * @return mixed
+ */
+function heigLine($key='',$content='',$class='text-dange'){
+	return preg_replace('/'.$key.'/i', '<span color="'.$class.'"><b>'.$key.'</b></span>', $content);
 }
 
-function reg($str){		 
-	return  _strip_tags(array("p", "br"),$str); 
+/**
+ * 去除Html标签
+ * @param string $str       内容
+ * @param array $tag        去除标签
+ * @return string
+ */
+function reg($str='',$tag=["p", "br"]){
+	return  _strip_tags($tag,$str);
 }
 
-/**   
-* PHP去掉特定的html标签
-* @param array $string   
-* @param bool $str  
-* @return string
-*/  
+/**
+ * PHP去掉特定的html标签
+ * @param $tagsArr
+ * @param $str
+ * @return mixed
+ */
 function _strip_tags($tagsArr,$str) {   
 	foreach ($tagsArr as $tag) {  
 		$p[]="/(<(?:\/".$tag."|".$tag.")[^>]*>)/i";  
 	}  
 	$return_str = preg_replace($p,"",$str);  
 	return $return_str;  
-}  
+}
+
 /**
- * [tag 截取字符串]
- * @param  [type] 资源字符串
- * @param  [type] 开始位置
- * @param  [type] 截取长度
- * @return [type] 结果字符串
+ * 截取字符串
+ * @param $str
+ * @param int $start
+ * @param int $length
+ * @return bool|string
  */
-function tagstr($str,$start=0,$length=250){	
+function tag_str($str,$start=0,$length=250){
 	$str=strip_tags(htmlspecialchars_decode($str));
 	$temp=mb_substr($str,$start,$length,'utf-8');
-	//return (strlen($str)>$length*1.5)?$temp.'...':$temp;
 	return $temp;
 }
 
@@ -671,7 +720,7 @@ function tagstr($str,$start=0,$length=250){
  * @return boolean   
  */ 
 function think_send_mail($to, $name, $subject = '', $body = '', $attachment = null){     
-	$config = C('THINK_EMAIL');     
+	$config = Congfig('THINK_EMAIL');
 	vendor('PHPMailer.class#phpmailer'); 
 	vendor('PHPMailer.class#SMTP');   
 	$mail             = new \PHPMailer(); //PHPMailer对象     
@@ -700,13 +749,15 @@ function think_send_mail($to, $name, $subject = '', $body = '', $attachment = nu
 	}     
 	return $mail->Send() ? true : $mail->ErrorInfo; 
 }
+
 /**
- * [SplitWord 分词]
- * @param [type] $str [description]
+ * 分词
+ * @param string $str
+ * @return mixed
  */
-function SplitWord($str){
+function splitWord($str=''){
 	vendor('SplitWord/SplitWord'); 
-	$split=new SplitWord();
+	$split=new \SplitWord();
 	$data=$split->SplitRMM($str);
 	$split->Clear();
 	return $data;
@@ -720,7 +771,7 @@ function SplitWord($str){
  * @param string $content 内容
  */
 
-function send_email($to,$title,$content,$webname="官方网站"){
+function send_email($to,$title,$content,$web_title="官方网站",$type='html'){
 	
 	//邮件相关变量
 	$cfg_smtp_server = 'smtp.163.com';
@@ -730,33 +781,31 @@ function send_email($to,$title,$content,$webname="官方网站"){
 
 	$smtp  = new \Service\smtp($cfg_smtp_server,$cfg_smtp_port,true,$cfg_smtp_usermail,$cfg_smtp_password);
 	$smtp->debug = false;
-	
-	$cfg_webname=$webname;
-	$mailtitle=$title;//邮件标题
-	$mailbody=$content;//邮件内容 
-			//$to 多个邮箱用,分隔
-	$mailtype='html';
-	return $smtp->sendmail($to,$cfg_webname,$cfg_smtp_usermail, $mailtitle, $mailbody, $mailtype);
+
+	$type='html';
+	return $smtp->sendmail($to,$web_title,$cfg_smtp_usermail, $title, $content, $type);
 }
 
 /**
- * [no_repeat_random 不重复随机数]
- * @param integer $begin [description]
- * @param integer $end   [description]
- * @param integer $limit [description]
+ * 不重复随机数
+ * @param int $begin
+ * @param int $end
+ * @param int $limit
+ * @return string
  */
 function no_repeat_random($begin=0,$end=20,$limit=4){
 	$rand_array=range($begin,$end);
 	shuffle($rand_array);//调用现成的数组随机排列函数
 	return implode('',array_slice($rand_array,0,$limit));//截取前$limit个
 }
+
 /**
- * [zeroize 数字补足]
- * @param  int $num    		[带补足数字]
- * @param  int $length 		[补足长度]
- * @param  string $fill   	[补足字符]
- * @param  int $fill   	  	[补足字符]
- * @return [type]         	[description]
+ * 数字补足
+ * @param $num
+ * @param int $length
+ * @param int $type
+ * @param string $fill
+ * @return string
  */
 function zeroize($num,$length=10,$type=1,$fill='0'){
 	$type=$type?STR_PAD_LEFT:STR_PAD_RIGHT;
@@ -824,12 +873,12 @@ function orderhandle($parameter){
 ------------------------------------*/
 //获取一个随机且唯一的订单号；
 function getordcode(){
-	$ord=M('Orderlist');
+	$ord=db('orderlist');
 	$numbers = range (10,99);
 	shuffle ($numbers); 
 	$code=array_slice($numbers,0,4); 
 	$ordcode=$code[0].$code[1].$code[2].$code[3];
-	$oldcode=$Ord->where("ordcode='".$ordcode."'")->getField('ordcode');
+	$oldcode=$ord->where("ordcode='".$ordcode."'")->getField('ordcode');
 	if($oldcode){
 		getordcode();
 	}else{
@@ -838,12 +887,12 @@ function getordcode(){
 }
 
 /**
- * [getKey 根据value得到数组key]
- * @param  [type] $arr   [数组]
- * @param  [type] $value [值]
- * @return [type]        [description]
+ * 根据value得到数组key
+ * @param array $arr
+ * @param string $value
+ * @return int|null|string
  */
-function getKey($arr,$value) {
+function getKey($arr=[],$value='') {
 	if(!is_array($arr)) return null;
 		foreach($arr as $k =>$v) {
 		  $return = getKey($v, $value);
