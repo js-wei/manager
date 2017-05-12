@@ -1,0 +1,66 @@
+<include file="public/header" title="{$model.name}" keywords="{$model.name}"/>
+<div class="col-lg-12 col-sm-12 col-xs-12">
+    <div class="widget  radius-bordered">
+        <div class="widget-header">
+            <span class="widget-caption">查看用户信息</span>
+        </div>
+        <div class="widget-body">
+           <table class="table table-bordered table-hover table-borderless">
+           	<tr>
+           		<td style="width:150px;">用户名</td>
+           		<td>{$info.username}</td>
+           	</tr>
+           	<tr>
+           		<td>用户昵称</td>
+           		<td>{$info.nickname}</td>
+           	</tr>
+           	<tr>
+           		<td>头像</td>
+           		<td><img src="{$info.head}" alt="{$info.username}" /></td>
+           	</tr>
+           	<tr>
+           		<td>关注</td>
+           		<td><a href="__URL__/see_user" class="text-danger see"  data-type="0" data-role="{$info.username}的关注列表">{$s}</a></td>
+           	</tr>
+           	<tr>
+           		<td>粉丝</td>
+           		<td><a href="__URL__/see_user" class="text-danger see" data-type="1" data-role="{$info.username}的粉丝列表">{$f}</a></td>
+           	</tr>
+           	<tr>
+           		<td>收藏文章</td>
+           		<td><a href="__URL__/see_user" class="text-danger see" data-type="2" data-role="{$info.username}的收藏列表">{$c}</a></td>
+           	</tr>
+           	<tr><td>注册时间</td><td>{$info.date|date='Y-m-d H:i:s',###}</td></tr>
+           	<tr><td>最后登陆IP</td><td>{$info.last_login_ip}</td></tr>
+           	<tr><td>最后登陆</td><td>{$info.last_login_time|date='Y-m-d H:i:s',###}</td></tr>
+           	<tr>
+           		<td colspan="2">
+           			<button type="button" class="btn btn-warning col-lg-2" onclick="window.history.go(-1);">返回</button>
+           		</td>
+           	</tr>
+           </table>
+        </div>
+        
+    </div>
+</div>
+<script type="text/javascript">
+	$(function(){
+		$('.see').on('click',function(e){
+			e.preventDefault();
+			let title = $(this).attr('data-role');
+			let t = $(this).attr('data-type');
+			$.post($(this).attr('href'),{t:t,id:{$info.id}},function(result){
+				layer.open({
+				  title:title,
+				  type: 1,
+				  closeBtn: 1, //不显示关闭按钮
+				  anim: 2,
+				  area: ['770px', '550px'], //宽高
+				  shadeClose: true, //开启遮罩关闭
+				  content: result
+				});
+			});
+		});
+	});
+</script>
+<include file="public/footer"/>

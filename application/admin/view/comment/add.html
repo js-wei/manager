@@ -13,8 +13,14 @@
            	<tr><td>踩数量</td><td>{$info.seem}</td></tr>
            	<tr><td>评论时间</td><td>{$info.date|date='Y-m-d H:i:s',###}</td></tr>
            	<tr><td>跟帖量</td><td><a href="__URL__/all?id={$info.id}&uid={$info.uid}" class="see">{$count}</a></td></tr>
+           	<tr>
+           		<td colspan="2">
+           			<button type="button" class="btn btn-warning col-lg-2" onclick="window.history.go(-1);">返回</button>
+           		</td>
+           	</tr>
            </table>
         </div>
+        
     </div>
 </div>
 <script type="text/javascript">

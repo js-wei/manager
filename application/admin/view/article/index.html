@@ -38,12 +38,12 @@
                                 </div>
                             </th>
                             <th>标题</th>
-                            <th style="width:120px;">发布者</th>
-                            <th style="width:320px">关键词</th>
-                            <th style="width:320px">简介</th>
-                            <th>标签属性</th>
-                            <th style="width:80px;">阅读量</th>
-                            <th style="width:140px;">添加时间</th>
+                            <th class="hidden-xs">发布者</th>
+                            <th class="hidden-xs">关键词</th>
+                            <th class="hidden-xs">简介</th>
+                            <!--<th>标签属性</th>-->
+                            <th class="hidden-xs">阅读量</th>
+                            <th class="hidden-xs">添加时间</th>
                             <th style="width:80px;">状态</th>
                             <th style="width:120px;">操作</th>
                         </tr>
@@ -60,14 +60,14 @@
                                     </div>
                                 </td>
                                 <td class="tips" data-role = "{$vo.title}">
-                                    {$vo.title|mb_substr=0,10}
+                                    {$vo.title|sub_str=0,12}
                                 </td>
-                                <td class="tips" data-role = "{$vo.author}">
-                                    {$vo.author|mb_substr=0,10}
+                                <td class="tips hidden-xs" data-role = "{$vo.author}">
+                                    {$vo.author|sub_str=0,12}
                                 </td>
-                                <td class="tips" data-role = "{$vo.keywords}">{$vo.keywords|mb_substr=0,10}</td>
-                                <td class="tips" data-role = "{$vo.description}">{$vo.description|mb_substr=0,10}</td>
-                                <td>
+                                <td class="tips hidden-xs" data-role = "{$vo.keywords}">{$vo.keywords|sub_str=0,12}</td>
+                                <td class="tips hidden-xs" data-role = "{$vo.description}">{$vo.description|sub_str=0,12}</td>
+                                <!--<td>
                                     <eq name="vo.com" value="1"><span class="label label-primary ml10">推荐</span></eq>
                                     <eq name="vo.hot" value="1"><span class="label label-info ml10">最热</span></eq>
                                     <eq name="vo.new" value="1"><span class="label label-danger ml10">最新</span></eq>
@@ -75,9 +75,9 @@
                                     <eq name="vo.top" value="1"><span class="label label-sky ml10">置顶</span></eq>
                                     <eq name="vo.img" value="1"><span class="label label-blueberry ml10">图文</span></eq>
                                     <if condition="$vo['com'] eq 0 and $vo['hot'] eq 0 and $vo['new'] eq 0 and $vo['head'] eq 0 and $vo['top'] eq 0 and $vo['img'] eq 0 "><span class="label label-default ml10">无</span></if>
-                                </td>
-                                <td><span class="badge badge-success badge-square">{$vo.hits}</span></td>
-                                <td>
+                                </td>-->
+                                <td class="hidden-xs"><span class="badge badge-success badge-square">{$vo.hits}</span></td>
+                                <td class="hidden-xs">
                                    {$vo.date|date='Y-m-d H:i:s',###}
                                 </td>
                                 <td>
@@ -85,6 +85,7 @@
                                 </td>
                                 <td>
                                     <a href="__URL__/add?id={$vo['id']}&aid={:input('aid')}">编辑</a>
+                                    <a href="__URL__/tiyan?id={$vo.id}&aid={:input('aid')}">居住体验</a>
                                     <eq name="vo.status" value="0"><a href="__URL__/status&aid={:input('aid')}&p={:input('p')}" data-role="forbidden" data-id="{$vo.id}" class="status">禁用</a><else /><a href="__URL__/status&aid={:input('aid')}&p={:input('p')}" data-role="enable" data-id="{$vo.id}" class="status">正常</a></eq>
                                     <a href="__URL__/status" data-role="delete"  data-id="{$vo.id}" class="status">删除</a>
                                 </td>
@@ -125,7 +126,7 @@
                 { "bSortable": true },
                 { "bSortable": false },
                 { "bSortable": false },
-                { "bSortable": false },
+//              { "bSortable": false },
                 { "bSortable": true },
                 { "bSortable": true },
                 { "bSortable": true },

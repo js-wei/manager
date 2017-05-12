@@ -24,7 +24,8 @@
         "jaeger/querylist-ext-request": "^1.0",
         "guzzlehttp/guzzle": "^6.2",
         "jaeger/querylist-ext-multi": "^1.0",
-        "jaeger/querylist-ext-dimage": "^1.1"
+        "jaeger/querylist-ext-dimage": "^1.1",
+        "workerman/gatewayclient": "^3.0"
     },
     "extra": {
         "think-path": "thinkphp"

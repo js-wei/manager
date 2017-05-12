@@ -9,7 +9,7 @@ return [
 	    '__IMAGES__'=>'/static/admin/img',
 	    '__SELF__'=>$_SERVER['REQUEST_URI'] 
 	],
-	'default_return_type'=>'jsonp',
+	//'default_return_type'=>'jsonp',
     'default_jsonp_handler'	 => 'callback',
 	'paginate'               => [
 	    'type'     => 'bootstrap',

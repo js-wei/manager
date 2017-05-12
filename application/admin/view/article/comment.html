@@ -1,0 +1,43 @@
+<include file="public/header" title="{$model.name}" keywords="{$model.name}"/>
+<div class="col-lg-12 col-sm-12 col-xs-12">
+    <div class="widget  radius-bordered">
+        <div class="widget-header">
+            <span class="widget-caption">查看评论</span>
+        </div>
+        <div class="widget-body">
+           <table class="table table-bordered table-hover table-borderless">
+           	<tr><td style="width:150px;">文档名称</td><td>{$info.title}</td></tr>
+           	<tr><td>评论内容</td><td>{$info.content}</td></tr>
+           	<tr><td>喜欢数量</td><td>{$info.love}</td></tr>
+           	<tr><td>吐槽数量</td><td>{$info.bad}</td></tr>
+           	<tr><td>评论时间</td><td>{$info.date|date='Y-m-d H:i:s',###}</td></tr>
+           	<tr><td>评论</td><td><a href="__URL__/all?id={$info.id}" class="see">{$count}</a></td></tr>
+           	<tr>
+           		<td colspan="2">
+           			<button type="button" class="btn btn-warning col-lg-2" onclick="window.history.go(-1);">返回</button>
+           		</td>
+           	</tr>
+           </table>
+        </div>
+        
+    </div>
+</div>
+<script type="text/javascript">
+	$(function(){
+		$('.see').on('click',function(e){
+			e.preventDefault();
+			$.post($(this).attr('href'),function(result){
+				layer.open({
+				  title:'{$info.title}的评论',
+				  type: 1,
+				  closeBtn: 1, //不显示关闭按钮
+				  anim: 2,
+				  area: ['770px', '550px'], //宽高
+				  shadeClose: true, //开启遮罩关闭
+				  content: result
+				});
+			});
+		});
+	});
+</script>
+<include file="public/footer"/>

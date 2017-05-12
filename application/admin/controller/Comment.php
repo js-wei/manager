@@ -12,12 +12,12 @@ class Comment extends Base{
 			'name'=>'评论管理'
 		];
 		$list = db('comments')->where(['cid'=>0])->paginate(10);
-		// 查询状态为1的用户数据 并且每页显示10条数据
+	
 		$count = db('comments')->count('*');
 		$this->assign('count',$count);
 		$this->assign('model',$model);
 		$this->assign('list',$list);
-		return $this->fetch();
+		return view();
 	}
 
 	public function add($id=0){

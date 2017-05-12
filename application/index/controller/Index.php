@@ -5,12 +5,24 @@ use GuzzleHttp;
 
 class Index extends Base{
     public function index(){
+		// 创建SDK实例
+		$script = & load_wechat('Script');
+		// 获取JsApi使用签名，通常这里只需要传 $ur l参数
+		$options = $script->getJsSign(url('index'),time(), '', 'wx0ee7ee63fb439f01');
+		// 处理执行结果
+		if($options===FALSE){
+		    // 接口失败的处理
+		    echo $script->errMsg;
+		}else{
+		    // 接口成功的处理
+		    $this->assign('options',$options);
+		}
+		return view();
     	//$parsedown = new \service\Parsedown();
     	// $parsedown = new \service\ParsedownExtra();
     	// $parsedown = new \service\Parser();
     	// $c = file_get_contents('./data/mark.md');
     	// echo $parsedown->makeHtml($c);
-    	p(1);
 	}
 	/**
 	 * 抓取数据

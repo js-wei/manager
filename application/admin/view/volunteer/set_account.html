@@ -1,0 +1,211 @@
+<include file="public/header" title="{$model.name}" keywords="{$model.name}" />
+<div class="col-lg-12 col-sm-12 col-xs-12">
+	<div class="row">
+		<div class="col-lg-12 col-sm-12 col-xs-12">
+			<div class="row">
+				<div class="col-lg-12 col-sm-12 col-xs-12">
+					<div class="widget flat radius-bordered">
+						<div class="widget-header bg-blue">
+							<span class="widget-caption">支付管理</span>
+						</div>
+						<div class="widget-body">
+							<div id="registration-form">
+								<form role="form" autocomplete="off" action="__URL__/add_account" id="togglingForm" enctype="multipart/form-data">
+									<div class="form-title">
+										微信支付
+									</div>
+									<div class="row">
+										<div class="col-sm-6">
+											<div class="form-group">
+												<span class="input-icon icon-right">
+													<input type="text" name="appid" value="<notempty name="info">{$info.appid}</notempty>" class="form-control" placeholder="APPID">
+													<i class="fa fa-exclamation-triangle"></i>
+												</span>
+												<input type="hidden" name="fid" value="{$fid}" />
+												<input type="hidden" name="id" value="<notempty name="info">{$info.id}</notempty>" />
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="form-group">
+												<span class="input-icon icon-right">
+													<input type="text" name="mch_id" value="<notempty name="info">{$info.mch_id}</notempty>" class="form-control" placeholder="MCHID">
+													<i class="fa fa-exclamation-triangle"></i>
+												</span>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-6">
+											<div class="form-group">
+												<span class="input-icon icon-right">
+													<input type="text" value="<notempty name="info">{$info.encodingaeskey}</notempty>" name="encodingaeskey" class="form-control" placeholder="KEY">
+													<i class="fa fa-exclamation-triangle"></i>
+												</span>
+											</div>
+										</div>
+										<div class="col-sm-6">
+											<div class="form-group">
+												<span class="input-icon icon-right">
+													<input type="text" value="<notempty name="info">{$info.appsecret}</notempty>" name="appsecret" class="form-control" placeholder="APPSECRET">
+													<i class="fa fa-exclamation-triangle"></i>
+												</span>
+											</div>
+										</div>
+									</div>
+									<div class="form-title">
+										证书上传
+									</div>
+									<div class="row">
+										<div class="col-sm-6">
+											<div class="form-group">
+												<input type="button" name="ssl_cer" id="ssl_cer" value="证书上传" class="table_btn"/>
+												<label class="lb-cer">SSL_CER:</label>
+												<input type="text" name="ssl_cer" class="form-control" id="ssl_cer1" value="<notempty name="info">{$info.ssl_cer}</notempty>"/>
+												<div style="height:10px;"></div>
+												<button class="btn btn-warning delete-file" data-type="cer" data-url="<notempty name="info">{$info.ssl_cer}</notempty>"><i class="fa fa-trash-o"></i>删除</button>
+												<div style="height:10px;"></div>
+												<label class="lb-key">SSL_KEY:</label>
+												<input type="text" name="ssl_key" class="form-control" id="ssl_key1" value="<notempty name="info">{$info.ssl_key}</notempty>"/>
+												<div style="height:10px;"></div>
+												<button class="btn btn-warning delete-file" data-type="key" data-url="<notempty name="info">{$info.ssl_key}</notempty>"><i class="fa fa-trash-o"></i>删除</button>
+												<input type="hidden" name="old_cer" id="old_cer" value="<notempty name="info">{$info.ssl_cer}</notempty>" />
+												<input type="hidden" name="old_key" id="old_key" value="<notempty name="info">{$info.ssl_key}</notempty>"/>
+											</div>
+										</div>
+									</div>
+									<button type="submit" class="btn btn-danger">添加</button>
+									<button type="button" class="btn btn-warning" onclick="javascript:history.go(-1);">返回</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<js file="__JS__/validation/bootstrapValidator.js" />
+<link rel="stylesheet" href="__PLUG__/Uploadify/uploadify.css" />
+<script type="text/javascript" src="__PLUG__/Uploadify/jquery.uploadify.min.js"></script>
+<style type="text/css">
+	.table_btn{padding-left:50px;}
+</style>
+<script type="text/javascript">
+	$(function() {
+		$('.delete-file').on('click',function(e){
+			e.preventDefault();
+			var t = $(this).attr('data-type');
+			var path = $(this).attr('data-url');
+			var index = layer.load(2, {
+				shade: [0.4, '#000'] //0.1透明度的白色背景
+			});
+			$.post('__URL__/delete_file',{u:path},function(data){
+				layer.close(index);
+				if(data.status == 1) {
+					layer.alert(data.msg, {
+						icon: 6
+					});
+				} else {
+					layer.alert(data.msg, {
+						icon: 5
+					});
+				}
+				if(t=='cer'){
+					$('#ssl_cer1').val('');
+				}
+				if(t=='key'){
+					$('#ssl_key1').val('');
+				}
+			});
+		});
+		
+		$("#ssl_cer").uploadify({
+	        fileTypeDesc    : '图片文件',
+	        buttonText      : '证书上传',
+	        buttonClass     : 'upload_button',
+	        fileObjName     : 'file',          //上传文件接收名
+	        swf             : '__PLUG__/Uploadify/uploadify.swf',
+	        uploader        : "{:Url('Uploadify/uploadfile')}",
+	        multi           : true,
+	        onUploadSuccess : function(file, data, response) {
+	        	var url = data.split('|');
+	        	if(data.indexOf('_cert')>-1){
+	        		$('#ssl_cer1').val(url[0]);
+	        		$('.lb-cer').text('SSL_CER:');
+	        	}
+	        	if(data.indexOf('_key')>-1){
+	        		$('#ssl_key1').val(url[0]);
+	        		$('.lb-key').text('SSL_KEY:');
+	        	}
+	            layer.msg("上传成功");
+	        }
+	    });
+		$('#togglingForm').bootstrapValidator({
+				message: '验证没有通过',
+				feedbackIcons: {
+					valid: 'glyphicon glyphicon-ok',
+					invalid: 'glyphicon glyphicon-remove',
+					validating: 'glyphicon glyphicon-refresh'
+				},
+				submitHandler: function(validator, form, submitButton) {
+					var index = layer.load(2, {
+						shade: [0.4, '#000'] //0.1透明度的白色背景
+					});
+					$.post(form.attr('action'), form.serialize(), function(data) {
+						layer.close(index);
+						if(data.status == 1) {
+							layer.alert(data.msg, {
+								icon: 6,
+								end: function() {
+									location.href = data.redirect;
+								}
+							});
+						} else {
+							layer.alert(data.msg, {
+								icon: 5
+							});
+						}
+					});
+				},
+				fields: {
+					appid: {
+						validators: {
+							notEmpty: {
+								message: '不能为空'
+							}
+						}
+					},
+					mch_id: {
+						validators: {
+							notEmpty: {
+								message: '不能为空'
+							}
+						}
+					},
+					encodingaeskey: {
+						validators: {
+							notEmpty: {
+								message: '不能为空'
+							}
+						}
+					},
+					appsecret: {
+						validators: {
+							notEmpty: {
+								message: '不能为空'
+							}
+						}
+					}
+				}
+			})
+			.find('button[data-toggle]')
+			.on('click', function() {
+				var $target = $($(this).attr('data-toggle'));
+				$target.toggle();
+				if(!$target.is(':visible')) {
+					$('#togglingForm').data('bootstrapValidator').disableSubmitButtons(false);
+				}
+			});
+	});
+</script>
+<include file="public/footer" />

@@ -17,7 +17,6 @@
 		"tpl":'<div id="comment{id}"class="comment"><img src="{head}" alt="{nickname}" class="comment-avatar"><div class="comment-body content"><div class="comment-text "><div class="comment-header"><a href="#" title="">{nickname}</a><span>{date}</span></div>{content}</div><div class="comment-footer"> <a href="#"><i class="fa fa-thumbs-o-up"></i>({love})</a><a href="#"><i class="fa fa-thumbs-o-down"></i>({seem})</a>{reply}</div></div></div>',
 		'form':'',
 		"callback":function(comment){
-			console.log(comment);
 			$(".comments").comment("setCommentAfter",{
 				"id":123, 
 				'head':'/static/admin/img/avatars/head.jpg',

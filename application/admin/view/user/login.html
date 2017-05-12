@@ -60,10 +60,13 @@ Purchase: http://wrapbootstrap.com
     <script src="__JS__/jquery-2.0.3.min.js"></script>
     <script src="__JS__/bootstrap.min.js"></script>
     <script src="__JS__/validation/bootstrapValidator.js"></script>
-    <js file="__PLUG__/layer/layer.js"/>
+    <link rel="stylesheet" type="text/css" href="__PLUG__/layui/css/layui.css"/>
+    <script src="__PLUG__/layui/layui.js"></script>
     <script type="text/javascript">
         $(function(){
-            $('form').bootstrapValidator({
+        	layui.use('layer', function(){
+        		var layer = layui.layer;
+        		$('form').bootstrapValidator({
                 excluded: [':disabled'],
                 feedbackIcons: {
                     valid: 'glyphicon glyphicon-ok',
@@ -118,6 +121,7 @@ Purchase: http://wrapbootstrap.com
                     });
                 }
             });  
+        	});
         });
     </script>
 </body>

@@ -28,3 +28,25 @@ function setpng($o_pic=''){
 	    }
 	}
 }
+function get_top_left($w=100,$h=200){
+	$pos=[];
+	$pos['l']=rand(0,$w);
+	$pos['t']=rand(0,$h);
+	$pos['z']=0;
+	$grocery = db('grocery')->where("`top` = ".$pos['t']." or `left`= ".$pos['l'])->find();
+
+	if($grocery['top']==$pos['t']){
+		$pos['t']++;
+	}
+	if($grocery['left']==$pos['l']){
+		$pos['l']++;
+	}
+	if($grocery['top']==$pos['t'] && $grocery['left']==$pos['l']){
+		$pos['t']++;
+		$pos['l']++;
+	}
+	if($grocery['top']==$pos['t'] && $grocery['left']==$pos['l'] && !empty($grocery['zindex'])){
+		$pos['z']=$grocery['zindex']+1;
+	}
+	p($pos);
+}

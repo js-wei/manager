@@ -65,7 +65,7 @@ return [
     ],
     'UPLOADE_FILE'=>[
         'size'=>1024*1024*8,        //8M最大
-        'ext'=>'txt,zip,tar,xls,pdf,doc,docx,rar,xlsx'
+        'ext'=>'txt,zip,tar,xls,pdf,doc,docx,rar,xlsx,pem'
     ],
     'UPLOADE_KINDEDITOR'=>[
         'size'=>1024*1024*8,        //8M最大

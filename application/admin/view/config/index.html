@@ -48,17 +48,11 @@
                     <label class="col-md-2 col-lg-2 control-label">网站说明</label>
                     <div class="col-md-6 col-lg-6">
                         <textarea name="description" class="form-control" rows="6" placeholder="网站说明"><notempty name="info">{$info.description}</notempty></textarea>
-                        <!--<ul class="points text-warning">
-                            <li>描述(description),提供的网页简短描述通常是为搜索引擎描述网页使用的</li>
-                            <li>网页描述不能太长,应该保持在140-200个字符或者100个左右的汉字</li>
-                            <li>不要给网页定义与网页描述内容无关的简短描述</li>
-                            <li>描述的滥用,导致目前常用的搜索引擎降低了description的重要性<sup class="text-danger">已降权</sup></li>
-                        </ul>-->
                     </div>
                 </div>
                <div class="form-group">
                     <label class="col-md-2 col-lg-2 control-label">网站LOGO</label>
-                    <div class="col-lg-2">
+                    <div class="col-lg-4">
                         <div>
                             <div style="float:left; margin-top:8px;margin-right:6px;"><input type="button" name="logo" id="fileImg" size="16" value="上传" class="table_btn"/></div>
                             <div class="btn btn-warning btn-xs" onclick="imgView('master');return false;" id="img_b"><i class="fa fa-search-plus" style="cursor:pointer;display:block"></i></div>
@@ -101,7 +95,7 @@
                 </div>
                 <div class="form-group">
                     <label class="col-md-2 col-lg-2 control-label">轮播个数</label>
-                    <div class="col-md-6 col-lg-2">
+                    <div class="col-md-6 col-lg-3">
                         <input type="text" name="sum" value="<notempty name="info">{$info.sum}</notempty>" class="form-control" id="sum" placeholder="轮播个数"/>
                         <div class="text-danger">
                         	*0代表全部,负数不显示,正数显示个数
@@ -110,25 +104,25 @@
                 </div>
                 <div class="form-group">
                     <label class="col-md-2 col-lg-2 control-label">联系固话</label>
-                    <div class="col-md-6 col-lg-2">
+                    <div class="col-md-6 col-lg-4">
                         <input type="text" name="tel" value="<notempty name="info">{$info.tel}</notempty>" class="form-control" id="tel" placeholder="联系固话"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-2 col-lg-2 control-label">联系手机</label>
-                    <div class="col-md-6 col-lg-2">
+                    <div class="col-md-6 col-lg-4">
                         <input type="text" name="phone" value="<notempty name="info">{$info.phone}</notempty>" class="form-control" id="phone" placeholder="联系手机"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-2 col-lg-2 control-label">联系传真</label>
-                    <div class="col-md-6 col-lg-2">
+                    <div class="col-md-6 col-lg-4">
                         <input type="text" name="fax" value="<notempty name="info">{$info.fax}</notempty>" class="form-control" id="fax" placeholder="联系传真"/>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-2 col-lg-2 control-label">联系邮箱</label>
-                    <div class="col-md-6 col-lg-2">
+                    <div class="col-md-6 col-lg-4">
                         <input type="text" name="email" value="<notempty name="info">{$info.email}</notempty>" class="form-control" id="email" placeholder="联系邮箱"/>
                     </div>
                 </div>

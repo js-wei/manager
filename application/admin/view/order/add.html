@@ -1,0 +1,67 @@
+<include file="public/header" title="{$model.name}" keywords="{$model.name}"/>
+<div class="col-lg-12 col-sm-12 col-xs-12">
+    <div class="widget  radius-bordered">
+        <div class="widget-header">
+            <span class="widget-caption">查看订单操作</span>
+        </div>
+        <div class="widget-body">
+            <form id="togglingForm" action="__URL__/add_handler" method="post" enctype="multipart/form-data" class="form-horizontal" autocomplete="off">
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">支付人</label>
+                    <div class="col-lg-3">
+                        <label class="label label-warning padding-10"><notempty name="info">{$info.userid|get_member_nickname}</notempty></label>
+                        <input type="hidden" name="id" value="<notempty name='info'>{$info.id}</notempty>">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">订单号</label>
+                    <div class="col-lg-4">
+                        <label class="label label-primary padding-10"><notempty name="info">{$info.ordid}</notempty></label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">支付金额</label>
+                    <div class="col-lg-4">
+                    	<label class="label label-darkpink padding-10"><notempty name="info"><i class="fa fa-cny"></i>{$info.ordfee}</notempty></label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">下单时间</label>
+                    <div class="col-lg-4">
+                    	<label class="label label-default padding-10"><notempty name="info">{$info.ordtime}</notempty></label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">支付时间</label>
+                    <div class="col-lg-4">
+                    	<label class="label label-default padding-10"><notempty name="info">{$info.finishtime}</notempty></label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">支付类型</label>
+                    <div class="col-lg-4">
+                    	<label class="label label-default padding-10"><notempty name="info">{$info.payment_type}</notempty></label>
+                    </div>
+                </div>
+                 <div class="form-group">
+                    <label class="col-lg-2 control-label">支付状态</label>
+                    <div class="col-lg-4">
+                    	<eq name="info.ordstatus" value="0"><label class="label label-default padding-10">未支付</label></eq>
+                        <eq name="info.ordstatus" value="1"><label class="label label-default padding-10">已支付</label></eq>
+                        <eq name="info.ordstatus" value="2"><label class="label label-default padding-10">代发货</label></eq>
+                        <eq name="info.ordstatus" value="3"><label class="label label-default padding-10">已发货</label></eq>
+                        <eq name="info.ordstatus" value="4"><label class="label label-default padding-10">已完成</label></eq>
+                    </div>
+                </div>
+                <hr class="wide" />
+                <div class="form-group">
+                    <div class="col-lg-4 col-lg-offset-1">
+                        <!--<button type="submit" class="btn btn-danger col-lg-2">提交</button>-->
+                        <button type="button" class="btn btn-warning col-lg-2 ml10" onclick="window.history.go(-1);">返回</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<include file="public/footer"/>

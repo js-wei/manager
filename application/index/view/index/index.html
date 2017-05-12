@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link href="//www.tpl.jswei.cn/assets/css/bootstrap.min.css" rel="stylesheet"/>
+		<link href="//www.tpl.jswei.cn/assets/css/font-awesome.min.css" rel="stylesheet"/>
+		<script src="//res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
+		<script src="//www.tpl.jswei.cn/assets/js/jquery-2.0.3.min.js"></script>
+		<script src="//www.tpl.jswei.cn/assets/js/bootstrap.min.js"></script>
+		<script>
+		    // 微信JSSDK异常处理
+		    wx.error(function(e){
+		        console.log(e);
+		    });
+		    // 注入JSSDK配置参数，默认开启所有接口权限
+		    wx.config({$options|json_encode});
+		    // 当JSSDK初始化完成后，再执行相关操作
+		    wx.ready(function(){
+		        // 这里就可以调用 wx 的jssdk的操作了
+		        $('.network').on('click',function(){
+		        	wx.getNetworkType({
+					    success: function (res) {
+					        var networkType = res.networkType; // 返回网络类型2g，3g，4g，wifi
+					        alert(networkType);
+					    }
+					});
+		        });
+		        $('.scanQRCode').on('click',function(){
+		        	wx.scanQRCode({
+					    needResult: 0, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+					    scanType: ["qrCode","barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+					    success: function (res) {
+					    	var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+						}
+					});
+		        });
+		        $('.chooseImage').on('click',function(){
+		        	wx.chooseImage({
+					    count: 1, // 默认9
+					    sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+					    sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+					    success: function (res) {
+					        var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+					    }
+					});
+		        });
+		    });
+		</script>
+	</head>
+	<body>
+		<div class="container">
+			<div style="height:20px;"></div>
+			<div class="row">
+				
+					<button class="btn btn-primary network">获取网络类型</button>
+					<button class="btn btn-warning scanQRCode">扫一扫</button>
+					<button class="btn btn-warning chooseImage">选取图片</button>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

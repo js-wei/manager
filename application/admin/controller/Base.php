@@ -33,6 +33,14 @@ class Base extends Controller{
 		$this->assign('action',strtolower($this->action));
 		$this->assign('controller',strtolower($this->controller));
 		$this->assign('module',strtolower($this->module));
+		$this->get_haert();
+	}
+	
+	protected function get_haert(){
+		$haert = db('grocery')->field('dates',true)->where(['status'=>0,'isreply'=>0])->limit(3)->order('id desc')->select();
+		$cnt = db('grocery')->where(['status'=>0,'isreply'=>0])->count('*');
+		$this->assign('haert',$haert);
+		$this->assign('haert_cnt',$cnt);
 	}
 	/**
 	 * [column_list 获取栏目数据]

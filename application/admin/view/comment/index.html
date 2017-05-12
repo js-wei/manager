@@ -59,13 +59,13 @@
 	                                </div>
 	                            </td>
 	                            <td class="tips" data-role="{$vo.aid|get_article_title}" >
-	                            	{$vo.aid|get_article_title|mb_substr=0,10}
+	                            	{$vo.aid|get_article_title|sub_str=0,10}
 	                            </td>
 	                            <td class="tips" data-role="{$vo.uid|get_member_nickname}">
-	                                {$vo.uid|get_member_nickname|mb_substr=0,10}
+	                                {$vo.uid|get_member_nickname|sub_str=0,10}
 	                            </td>
 	                            <td>
-	                                {$vo.content}
+	                                {$vo.content|sub_str=0,15}
 	                            </td>
 	                            <td>
 	                                <label class="label label-danger">{$vo.love}</label>

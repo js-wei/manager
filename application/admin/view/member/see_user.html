@@ -1,0 +1,79 @@
+<link href="__CSS__/font-awesome.min.css" rel="stylesheet" />
+<link id="beyond-link" href="__CSS__/beyond.min.css" rel="stylesheet" type="text/css" />
+<script src="__JS__/jquery-2.0.3.min.js" type="text/javascript" charset="utf-8"></script>
+<div class="container-fluid">
+	<notempty name="list">
+		<div class="row">
+			<eq name="t" value="2">
+				<style type="text/css">
+					.text-continer{
+						padding-top:5px;
+						margin:10px;
+						height:90px;
+					}
+					.text-continer h4{
+						text-align:center;
+					}
+					.text-continer h4 a{
+						color:#fff;
+						margin-bottom:10px;
+					}
+					.text-continer p{
+						font-size:12px;
+						text-align:left;
+						text-indent:1em;
+						line-height:20px;
+					}
+				</style>
+				<volist name="list" id="vo">
+					<div class="col-lg-4 col-sm-6 col-xs-12 bg-azure text-continer">
+						<h4><a href="javascript:void(0);">{$vo.title}</a></h4>
+						<p>{$vo.description|sub_str=0,40,false}</p>
+					</div>
+				</volist>
+				<else />
+				<volist name="list" id="vo">
+					<div class="col-lg-4 col-sm-6 col-xs-12 pt10">
+						<div class="databox databox-graded">
+							<div class="databox-left no-padding">
+								<img src="{$vo.head}" style="width:65px; height:65px;">
+							</div>
+							<div class="databox-right padding-top-20 bg-whitesmoke">
+								<div class="databox-text darkgray">{$vo.username}</div>
+								<div class="databox-text darkgray">{$vo.nickname}</div>
+							</div>
+						</div>
+					</div>
+				</volist>
+			</eq>
+		</div>
+		<else />
+		<style type="text/css">
+			.error{
+				height:100%;
+				width:100%;
+			    background: rgba(0,0,0,.05);
+    			text-align: center;
+    			margin-top:20px;
+			}
+			.error h1{
+				font-size: 110px;
+			    font-weight: 200;
+			    text-align: center;
+			    color: #2dc3e8;
+			}
+			p.description {
+				padding-top:20px;
+			    color: #e5e5e5;
+			    font-size: 40px;
+			    margin: 0;
+			}
+		</style>
+		<section class="error text-center">
+			<h1>:) 没有数据</h1>
+			<div class="error-divider">
+				<p class="description">努力地查找,但是还是没有找到任何数据</p>
+			</div>
+		</section>
+	</notempty>
+</div>

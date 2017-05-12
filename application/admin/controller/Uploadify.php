@@ -22,6 +22,23 @@ class Uploadify extends Base{
 	        return $file->getError();
 	    }
 	}
+	
+	/**
+	 * [uploadfile 上传单个文件]
+	 * @return [type] [description]
+	 */
+	public function uploadfile($file='file'){
+	    $file = request()->file($file);
+	    $path = ROOT_PATH . 'public'. DS .'uploads'. DS . 'file';
+	    $info = $file->validate(config('UPLOADE_FILE'))->move($path);
+	    if($info){
+	        $fullPath =  $path.DS.$info->getSaveName().'|'.$info->getinfo()['name'];
+	        return $fullPath;
+	    }else{
+	        return $file->getError();
+	    }
+	}
+	
 	/**
 	 * [uploads 上传多个文件]
 	 * @param  string $file [接收字段]
@@ -43,6 +60,9 @@ class Uploadify extends Base{
 	        }    
 	    }
 	}
+	
+	
+	
 	/**
 	 * [KindEditorUpload KindEditor编辑器上传文件]
 	 */

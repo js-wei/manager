@@ -1,0 +1,114 @@
+<include file="public/header" title="{$model.name}" keywords="{$model.name}"/>
+<div class="col-lg-12 col-sm-12 col-xs-12">
+    <div class="widget  radius-bordered">
+        <div class="widget-header">
+            <span class="widget-caption">回复操作</span>
+        </div>
+        <div class="widget-body">
+            <form id="togglingForm" action="__URL__/add_handler" method="post" enctype="multipart/form-data" class="form-horizontal" autocomplete="off">
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">倾诉人</label>
+                    <div class="col-lg-3">
+                        <label class="label label-warning padding-10"><notempty name="info">{$info.uid|get_member_nickname}</notempty></label>
+                        <input type="hidden" name="id" value="<notempty name='info'>{$info.id}</notempty>">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">TA的心事</label>
+                    <div class="col-lg-4">
+                        <label class="label label-primary padding-10"><notempty name="info">{$info.heart}</notempty></label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-2 control-label">回复TA</label>
+                    <div class="col-lg-4">
+                    	<empty name="info.reply">
+                    		 <textarea name="reply" rows="6"  class="form-control"></textarea>
+                    		 <else />
+                    		 <label class="label label-darkpink"><notempty name="info">{$info.reply}</notempty></label>
+                    	</empty>
+                    </div>
+                </div>
+                <hr class="wide" />
+                <div class="form-group">
+                    <div class="col-lg-4 col-lg-offset-2">
+                        <button type="submit" class="btn btn-danger col-lg-2 <notempty name="info.reply">disabled</notempty>">提交</button>
+                        <button type="button" class="btn btn-warning col-lg-2 ml10" onclick="window.history.go(-1);">返回</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<js file="__JS__/validation/bootstrapValidator.js"/>
+<link rel="stylesheet" href="__PLUG__/kindeditor/plugins/code/prettify.css" />
+<script charset="utf-8" src="__PLUG__/kindeditor/kindeditor.js"></script>
+<script charset="utf-8" src="__PLUG__/kindeditor/lang/zh_CN.js"></script>
+<script charset="utf-8" src="__PLUG__/kindeditor/plugins/code/prettify.js"></script>
+<script type="text/javascript">
+    $(function(){
+    	var editor1;
+    	KindEditor.ready(function(K) {
+        	var option = {
+                cssPath : '__PLUG__/kindeditor/plugins/code/prettify.css',
+                uploadJson : "{:Url('Uploadify/KindEditorUpload')}",
+                height:350,
+                width:750,
+                newlineTag:"p",
+                filterMode : true,  
+                allowFlashUpload : false,  
+				allowMediaUpload : false,  
+				allowFileManager : false, 
+                extraFileUploadParams:{     //配置多图上传水印.
+                    'water':-1,      //不填:默认无水印,-1/无水印,0:网址水印,1:LOGO水印,2:文字水印
+                    'font':'{$site.title|default='魏巍是个大帅锅'}',      //与2:文字水印配合使用
+                },
+                afterBlur: function(){this.sync();},
+            };
+            editor1 = K.create('textarea[name="content"]',option);
+            prettyPrint();
+        });
+        
+        $('#togglingForm').bootstrapValidator({
+            message: '验证没有通过',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            submitHandler: function (validator, form, submitButton) {
+                var index = layer.load(2,{
+                    shade: [0.4,'#000'] //0.1透明度的白色背景
+                });
+                $.post(form.attr('action'),form.serialize(),function(data){
+                    layer.close(index);
+                    if(data.status==1){
+                        layer.alert(data.msg,{icon:6,end:function(){
+                            location.href = data.redirect;
+                        }});
+                    }else {
+                        layer.alert(data.msg,{icon:5});
+                    }
+                });
+            },
+            fields: {
+                title: {
+                    validators: {
+                        notEmpty: {
+                            message: '请输入公益名称'
+                        }
+                    }
+                }
+            }
+        })
+        .find('button[data-toggle]')
+        .on('click', function () {
+            var $target = $($(this).attr('data-toggle'));
+            $target.toggle();
+            if (!$target.is(':visible')) {
+                $('#togglingForm').data('bootstrapValidator').disableSubmitButtons(false);
+            }
+        });
+    });
+</script>
+<include file="public/footer"/>

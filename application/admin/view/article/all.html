@@ -1,0 +1,32 @@
+<link href="__CSS__/font-awesome.min.css" rel="stylesheet" />
+<link id="beyond-link" href="__CSS__/beyond.min.css" rel="stylesheet" type="text/css" />
+<script src="__JS__/jquery-2.0.3.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="__PLUG__/comment/js/comment.js" type="text/javascript" charset="utf-8"></script>
+<style type="text/css">
+	.comments{width:95%;margin:10px auto;}
+</style>
+<div class="comments">
+	
+</div>
+
+<script type="text/javascript">
+	$(".comments").comment({
+		'reply':false,			//	
+		"agoComment":{$list},
+		'header':'小伙伴们的踊跃发言',
+		"tpl":'<div id="comment{id}"class="comment"><img src="{head}" alt="{nickname}" class="comment-avatar"><div class="comment-body content"><div class="comment-text "><div class="comment-header"><a href="#" title="">{nickname}</a><span>{date}</span></div>{content}</div><div class="comment-footer"> <a href="#"><i class="fa fa-thumbs-o-up"></i>({love})</a><a href="#"><i class="fa fa-thumbs-o-down"></i>({seem})</a>{reply}</div></div></div>',
+		'form':'',
+		"callback":function(comment){
+			console.log(comment);
+			$(".comments").comment("setCommentAfter",{
+				"id":123, 
+				'head':'/static/admin/img/avatars/head.jpg',
+				'love':0,
+				'seem':0,
+				"nickname":comment.username, 
+				"content":comment.content, 
+				"date":$.getTime(comment.time,'yyyy-MM-dd')
+			});
+		}
+	});
+</script>
