@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>聊天程序</title>
+    <link rel="stylesheet" href="__THEME__CSS__/bootstrap.min.css">
+    <link rel="stylesheet" href="__CSS__/style.css"/>
+    <script type="text/javascript" src="__THEME__JS__/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="__THEME__JS__/bootstrap.min.js"></script>
+</head>
+<body>
+	<div class="container-fluid">
+		<div class="col-md-3 col-lg-3 custom-service hidden-xs">
+			<div class="logo">
+				<div class="col-md-3 custom-logo">
+					<img src="__IMAGES__/logo.png" class="img-rounded img-responsive"/>
+				</div>
+				<div class="col-md-9 custom-title">
+					<h4>聊天系统</h4>
+				</div>
+			</div>
+			<div class="form-search">
+				<input type="search" name="search"  placeholder="search user..."/>
+			</div>
+			<ul class="list-unstyled custom-user-list">
+				<li class="active">
+					<img src="__IMAGES__/01.jpg" class="img-circle img-responsive"/>
+					<p>客服一</p>
+				</li>
+				<li>
+					<img src="__IMAGES__/02.jpg" class="img-circle img-responsive"/>
+					<p>客服二</p>
+				</li>
+				<li>
+					<img src="__IMAGES__/03.jpg" class="img-circle img-responsive"/>
+					<p>客服三</p>
+				</li>
+			</ul>
+		</div>
+		<div class="col-md-9 custom-continer">
+			<div class="custom-continer-content">
+				<div class="content-block">
+					<p class="time">22:31</p>
+					<div class="content">
+						<img src="__IMAGES__/01.jpg"/>
+						<p>Hello，这是一个基于Vue + Webpack构建的简单chat示例，聊天记录保存在localStorge。简单演示了Vue的基础特性和webpack配置。</p>
+					</div>
+				</div>
+			</div>
+			<div class="custom-continer-sender">
+				<textarea name="sender" rows="5" placeholder="按 Ctrl + Enter 发送"></textarea>
+				<button class="btn btn-success pull-right sender">发送</button>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		ws = new WebSocket("ws://119.28.12.11:7272");
+		// 服务端主动推送消息时会触发这里的onmessage
+		ws.onmessage = function(e){
+			console.log(e);
+		    
+		};
+		$(function(){
+			$(document).on('click','.sender',function(e){
+				e.preventDefault();
+				console.log(1);
+			});
+			$(document).keypress(function(e){ 
+				console.log(e.ctrlKey);
+			}); 
+		});
+		function post(){
+			
+		}
+	</script>
+</body>
+</html>

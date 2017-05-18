@@ -25,7 +25,10 @@
         "guzzlehttp/guzzle": "^6.2",
         "jaeger/querylist-ext-multi": "^1.0",
         "jaeger/querylist-ext-dimage": "^1.1",
-        "workerman/gatewayclient": "^3.0"
+        "workerman/gatewayclient": "^3.0",
+        "zoujingli/wechat-php-sdk": "^1.3",
+        "endroid/qrcode": "^1.9",
+        "workerman/gateway-worker": "^3.0"
     },
     "extra": {
         "think-path": "thinkphp"

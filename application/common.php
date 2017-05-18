@@ -36,7 +36,7 @@ function & load_wechat($type = '',$platform='') {
         'ssl_key'         => '', // 微信支付，双向证书（可选，操作退款或打款时必需）
         'cachepath'       => '', // 设置SDK缓存目录（可选，默认位置在Wechat/Cache下，请保证写权限）
     ];
-	import('wechat-php-sdk.include', EXTEND_PATH);
+
     static $wechat = array();
     $index = md5(strtolower($type));
     if (!isset($wechat[$index])) {

@@ -4,9 +4,10 @@ return [
 		'__ROOT__'=>'/',
 		'__PUBLIC__'=>'/static',
 		'__PLUG__'=>'/static/plug',
-	    '__JS__'=>'/static/admin/js',
-	    '__CSS__'=>'/static/admin/css',
-	    '__IMAGES__'=>'/static/admin/img',
+	    '__THEME__JS__'=>'/static/admin/js',
+	    '__THEME__CSS__'=>'/static/admin/css',
+	    '__CSS__'=>'/static/home/css',
+	    '__IMAGES__'=>'/static/home/images',
 	    '__SELF__'=>$_SERVER['REQUEST_URI'] 
 	],
 	//'default_return_type'=>'jsonp',
