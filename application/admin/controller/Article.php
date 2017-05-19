@@ -10,10 +10,14 @@ class article extends Base{
 		$model = [
 			'name'=>'文档管理'
 		];
-		$where='';
+		$where=[];
 		if($aid){
 			$where['column_id']=$aid;
 		}
+		
+		$search = $this->_search();
+		$where = array_merge($where,$search);
+		
 		$list = db('article')->where($where)->order('date desc')->paginate(15);
 		// 查询状态为1的用户数据 并且每页显示10条数据
 		$count = db('article')->count('*');
@@ -83,7 +87,7 @@ class article extends Base{
 		$model = [
 			'name'=>'体验管理'
 		];
-		$where='';
+		$where=[];
 		if($aid){
 			$where['fid']=$id;
 		}

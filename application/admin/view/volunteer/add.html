@@ -7,6 +7,17 @@
         <div class="widget-body">
             <form id="togglingForm" action="__URL__/add_handler" method="post" enctype="multipart/form-data" class="form-horizontal" autocomplete="off">
                 <div class="form-group">
+                    <label class="col-lg-2 control-label">公益所属</label>
+                    <div class="col-lg-4">
+                       <select name="fid" id="fid">
+                       		<option value="0">---默认所属---</option>
+                       		<volist name="list" id="clf">
+                       			<option value="{$clf.id}" <notempty name="info"><eq name="clf.id" value="$info.fid">selected</eq></notempty>>{$clf.title}</option>
+                       		</volist>
+                       </select>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="col-lg-2 control-label">公益名称<sup class="text-danger">*</sup></label>
                     <div class="col-lg-3">
                         <input type="text" name="title" value="<notempty name="info">{$info.title}</notempty>" class="form-control" id="name" placeholder="公益名称"/>
@@ -40,9 +51,9 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-2 control-label">主要内容</label>
+                    <label class="col-lg-2 control-label">公益说明</label>
                     <div class="col-lg-6">
-                         <textarea name="content" class="form-control" rows="5" placeholder="主要内容"><notempty name="info">{$info.content}</notempty></textarea>
+                         <textarea name="content" class="form-control" rows="5" placeholder="公益说明"><notempty name="info">{$info.content}</notempty></textarea>
                     </div>
                 </div>
                 <div class="form-group">

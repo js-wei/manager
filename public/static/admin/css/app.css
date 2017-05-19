@@ -3,3 +3,9 @@
 .databox-right>.databox-text>a {display: inline-block;color: #2dc3e8;font-size:14px;}
 .table-striped>tbody>tr:nth-child(odd)>td,.table-striped>tbody>tr:nth-child(even)>td{text-overflow:ellipsis;-o-text-overflow:ellipsis;-webkit-text-overflow:ellipsis;-moz-text-overflow:ellipsis;white-space:nowrap;}
 .table-striped>tbody>tr>td{cursor:pointer;}
+.table tbody tr td{height:30px;line-height:30px;}
+.pb10 {padding-bottom: 10px;}
+.form-search {margin: 10px 0px 0px 0px; padding: 0px;z-index: 100;}
+.form-search{margin:10px 0px 0px 0px;padding:0px;z-index:100;}
+.form-search input,.form-search select{height:35px;line-height:35px;}
+.zindex{z-index:100;}

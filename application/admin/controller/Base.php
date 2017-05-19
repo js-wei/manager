@@ -14,7 +14,7 @@ class Base extends Controller{
 		$this->controller = request()->controller();
 		$this->module = request()->module();
  		//判断是否登录
-		$this->check_priv(); 
+		//$this->check_priv(); 
 		//获取功能导航
 		$nav = $this->auth_list();
 		//获取栏目导航
@@ -42,6 +42,34 @@ class Base extends Controller{
 		$this->assign('haert',$haert);
 		$this->assign('haert_cnt',$cnt);
 	}
+	/**
+	 * 组织搜索
+	 */
+	protected function _search($param=[]){
+		$where=[];
+		
+		if(empty($param)){
+			$param = request()->param();
+		}
+		if(!empty($param['s_keywords'])){
+			$where['title']=['like',"%".$param['s_keywords']."%"];
+		}
+		if(!empty($param['s_status'])){
+			$where['status']=$param['s_status'];
+		}
+		if(!empty($param['s_date'])){
+			$date = explode('-',$param['s_date']);
+			$where['date']=['between',[$date[0],$date[1]]];
+		}
+		$this->assign('search',[
+			's_keywords'=>!empty($param['s_keywords'])?$param['s_keywords']:'',
+			's_date'=>!empty($param['s_date'])?$param['s_date']:'',
+			's_status'=>!empty($param['s_status'])?$param['s_status']:''
+		]);
+		return $where;
+	}
+	
+	
 	/**
 	 * [column_list 获取栏目数据]
 	 * @return [type] [description]

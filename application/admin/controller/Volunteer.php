@@ -27,6 +27,9 @@ class Volunteer extends Base{
         	$vo = db('volunteer')->field('dates',true)->find($id);
         	$this->assign('info',$vo);
 		}
+		$list = db('article')->field('id,title')->where('status=0')->order('id desc')->select();
+		
+		$this->assign('list',$list);
 		$this->assign('model',$model);
 		return view();
 	}

@@ -154,21 +154,23 @@
 	        });
 		}); 
         
+        
         $('#simpledatatable tbody tr .checkboxes').change(function () {
             $(this).parents('tr').toggleClass("active");
+         });
+         
+        $('.onSearch').on('click',(e)=>{
+          	$('#search').submit();
         });
-        $('#simpledatatable_length').remove();
-        $('.DTTT.btn-group').css('right','0px');
-        $('input[type="search"]').attr('placeholder', '请输入标题/发布者');
-        $('.dataTables_filter').css({"position":"relative","height":"40px"});
-        $('.dataTables_filter label').append("<button class=\"btn btn-info ml10 search\">搜索</button>").css({
-            "position":"absolute",
-            "left":"0px"
+        $('.applyBtn').on('click',(e)=>{
+          	e.preventDefault();
         });
-        $('.search').on('click',function(e){
-            e.preventDefault();
-            alert(1);
+        $('.cancelBtn').on('click',(e)=>{
+          	e.preventDefault();
+          	$('input#reservation').val('');
         });
+        $('#simpledatatable_wrapper>.DTTT').addClass('hidden-xs');
+        
         $('.tips').on('click',function(e){
 	    	e.preventDefault();
 	    	var type = $(this).attr('data-type');

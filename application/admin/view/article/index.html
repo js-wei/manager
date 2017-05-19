@@ -12,21 +12,17 @@
                     <a href="#" data-toggle="collapse">
                         <i class="fa fa-minus"></i>
                     </a>
-                    <!-- <a href="#" data-toggle="dispose">
-                        <i class="fa fa-times"></i>
-                    </a> -->
                 </div>
             </div>
             <div class="widget-body">
-                <div class="col-xs-4 col-md-6">
+                <div class="col-xs-4 col-md-6 pb10 zindex">
                     <a href="__URL__/add?aid={:input('aid')}" class="btn btn-success">添加文档</a>
                     <a href="__URL__/status" data-role="forbidden" class="btn btn-warning status">选中禁用</a>
                     <a href="__URL__/status" data-role="enable" class="btn btn-info status">选中启用</a>
                     <a href="__URL__/status" data-role="delete-all" class="btn btn-danger status">选中删除</a>
+                	<include file="public/search">
                 </div>
-                <div class="clearfix"></div>
-                <hr>
-                <table class="table table-striped table-bordered table-hover" id="simpledatatable">
+                <table class="table table-striped table-bordered table-hover pt10" id="simpledatatable">
                     <thead>
                         <tr>
                             <th style="width:80px">
@@ -105,6 +101,8 @@
         $('#simpledatatable').dataTable({
             "sDom": "Tflt",
             "iDisplayLength": {$count},
+            "searching": false,
+            "paging":false,
             "oTableTools": {
                 "aButtons": [
                     "copy", "csv", "xls","pdf"
